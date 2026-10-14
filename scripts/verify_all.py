@@ -19,6 +19,7 @@ evidence; nothing is taken from a previous run. Run any time:
 
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 import subprocess
@@ -59,7 +60,7 @@ def gate1_suite() -> None:
 def gate2_encoding() -> None:
     bad: list[str] = []
     checked = 0
-    roots = ["src", "tests", "scripts", "docs", "sources"]
+    roots = ["src", "tests", "scripts", "docs", "sources", "LICENSES"]
     files: list[Path] = []
     for root in roots:
         files.extend(
@@ -67,9 +68,15 @@ def gate2_encoding() -> None:
             for p in (REPO / root).rglob("*")
             if p.is_file()
             and p.suffix.lower()
-            in {".py", ".md", ".toml", ".yml", ".json", ".ts", ".mjs", ".svg"}
+            in {".py", ".md", ".toml", ".yml", ".json", ".ts", ".mjs", ".svg", ".txt"}
         )
-    files += [REPO / "README.md", REPO / "pyproject.toml", REPO / "LICENSE"]
+    files += [
+        REPO / "README.md",
+        REPO / "pyproject.toml",
+        REPO / "LICENSE.md",
+        REPO / "LICENSE-AGPL-3.0.txt",
+        REPO / "LICENSE-EUPL-1.2.txt",
+    ]
     for path in files:
         data = path.read_bytes()
         checked += 1
@@ -247,6 +254,59 @@ def gate5_statement_audit() -> None:
     funding_ok = (REPO / ".github" / "FUNDING.yml").exists()
     ok = ok and funding_ok
     details.append(f"FUNDING.yml={funding_ok}")
+    expected_licenses = {
+        "LICENSE-AGPL-3.0.txt": (
+            34523,
+            "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+        ),
+        "LICENSE-EUPL-1.2.txt": (
+            13792,
+            "57fb42fbcd0b037ce528ed8f72f1ec095d67bc6825ecf1448ff39be1fe68a4b4",
+        ),
+        "LICENSES/AGPL-3.0-or-later.txt": (
+            34523,
+            "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+        ),
+        "LICENSES/EUPL-1.2.txt": (
+            13792,
+            "57fb42fbcd0b037ce528ed8f72f1ec095d67bc6825ecf1448ff39be1fe68a4b4",
+        ),
+    }
+    license_details: list[str] = []
+    for rel, (size, digest) in expected_licenses.items():
+        path = REPO / rel
+        actual_size = path.stat().st_size if path.exists() else -1
+        actual_digest = (
+            hashlib.sha256(path.read_bytes()).hexdigest()
+            if path.exists()
+            else "missing"
+        )
+        matched = actual_size == size and actual_digest == digest
+        ok = ok and matched
+        license_details.append(f"{rel}={'exact' if matched else 'MISMATCH'}")
+    details.append("licenses " + ",".join(license_details))
+    license_index_ok = (REPO / "LICENSE.md").exists() and not (
+        REPO / "LICENSE"
+    ).exists()
+    ok = ok and license_index_ok
+    details.append(f"LICENSE.md index={license_index_ok}")
+    licensee = shutil.which("licensee")
+    if licensee:
+        detected = run([licensee, "detect", "--json"], REPO, 300)
+        try:
+            payload = json.loads(detected.stdout)
+            keys = {item.get("spdx_id") for item in payload.get("licenses", [])}
+            licensee_ok = detected.returncode == 0 and {
+                "AGPL-3.0",
+                "EUPL-1.2",
+            }.issubset(keys)
+        except (json.JSONDecodeError, AttributeError):
+            licensee_ok = False
+            keys = set()
+        ok = ok and licensee_ok
+        details.append(f"Licensee={sorted(k for k in keys if k)}")
+    else:
+        details.append("Licensee=not-installed(hash-proof only)")
     gate(5, "statement audit", ok, "; ".join(details))
 
 

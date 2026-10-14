@@ -16,7 +16,7 @@ Grey Ink, and a 90 fps collage that flashes sixteen instants per frame*
 
 [![Ko-fi](https://img.shields.io/badge/Support-Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/saimonokuma)
 [![Nova-Violet Role](https://img.shields.io/badge/Nova--Violet-Role-9b59b6?style=for-the-badge)](https://github.com/Nova-Violet-Role)
-[![License](https://img.shields.io/badge/License-AGPL--3.0_OR_EUPL--1.2-764ba2?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-AGPL--3.0_OR_EUPL--1.2-764ba2?style=for-the-badge)](LICENSE.md)
 
 [![PyPI](https://img.shields.io/pypi/v/moviola-protocol-mcp?style=flat-square)](https://pypi.org/project/moviola-protocol-mcp/)
 [![MCP stdio](https://img.shields.io/badge/MCP-stdio%20%C2%B7%2011%20tools-2C3E50?style=flat-square)](#-mcp-tools--every-tool-every-argument)
@@ -44,7 +44,7 @@ here, it is the *point*. There is an issue form for exactly that.
 New here? The fastest path is to let your agent do it:
 
 ```sh
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.2/moviola_protocol_mcp-0.3.2-py3-none-any.whl moviola doctor
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.3/moviola_protocol_mcp-0.3.3-py3-none-any.whl moviola doctor
 ```
 
 Exit 0 and a JSON block naming your `ffmpeg`, `ffprobe` and `ffplay` means
@@ -431,7 +431,7 @@ binary is a visible fact, not a mystery.
 uvx moviola-protocol-mcp
 
 # 2. From the GitHub release wheel
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.2/moviola_protocol_mcp-0.3.2-py3-none-any.whl moviola-protocol-mcp
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.3/moviola_protocol_mcp-0.3.3-py3-none-any.whl moviola-protocol-mcp
 
 # 3. Straight from the repository
 uvx --from git+https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP moviola-protocol-mcp
@@ -1064,7 +1064,10 @@ Copyright 2026 **Saimonokuma**.
 `SPDX-License-Identifier: AGPL-3.0-or-later OR EUPL-1.2`
 
 Licensed under the GNU Affero General Public License v3.0 or later, or,
-at your choice, the European Union Public Licence v1.2. These are
+at your choice, the European Union Public Licence v1.2. The complete
+canonical texts ship in [`LICENSE-AGPL-3.0.txt`](LICENSE-AGPL-3.0.txt)
+and [`LICENSE-EUPL-1.2.txt`](LICENSE-EUPL-1.2.txt), with byte-identical
+SPDX/REUSE-layout copies in [`LICENSES/`](LICENSES/). These are
 **copyleft** licences, chosen deliberately over permissive ones: what is
 shared here cannot be enclosed later, by anyone, including us. If this
 project ever goes quiet, the code, the measurements and the history
@@ -1083,7 +1086,7 @@ inspiration only; no assets from either work are included.
 
 [![Support Our Journey](https://img.shields.io/badge/🔗_Support_Our_Journey-Ko--fi-FF5E5B?style=for-the-badge)](https://ko-fi.com/saimonokuma)
 
-[Issues](https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/issues) · [Releases](https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases) · [Licence](LICENSE) · [Easter Egg](docs/easter-egg.md)
+[Issues](https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/issues) · [Releases](https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases) · [Licence](LICENSE.md) · [Easter Egg](docs/easter-egg.md)
 
 © 2026 Nova-Violet Role · Non-Profit Organization
 
