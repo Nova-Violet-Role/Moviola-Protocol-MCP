@@ -18,9 +18,10 @@ Grey Ink, and a 90 fps collage that flashes sixteen instants per frame*
 [![Nova-Violet Role](https://img.shields.io/badge/Nova--Violet-Role-9b59b6?style=for-the-badge)](https://github.com/Nova-Violet-Role)
 [![License](https://img.shields.io/badge/License-AGPL--3.0_OR_EUPL--1.2-764ba2?style=for-the-badge)](LICENSE)
 
+[![PyPI](https://img.shields.io/pypi/v/moviola-protocol-mcp?style=flat-square)](https://pypi.org/project/moviola-protocol-mcp/)
 [![MCP stdio](https://img.shields.io/badge/MCP-stdio%20%C2%B7%2011%20tools-2C3E50?style=flat-square)](#-mcp-tools--every-tool-every-argument)
 [![UVX](https://img.shields.io/badge/UVX-wheel%20verified%20clean--room-27ae60?style=flat-square)](#-install)
-[![Tests](https://img.shields.io/badge/tests-38%20passing-27ae60?style=flat-square)](#-verify-it-yourself)
+[![Tests](https://img.shields.io/badge/tests-39%20passing-27ae60?style=flat-square)](#-verify-it-yourself)
 [![ffmpeg trio](https://img.shields.io/badge/ffmpeg-ffprobe%20%C2%B7%20ffplay-374151?style=flat-square)](#requirements)
 [![REUSE](https://img.shields.io/badge/REUSE-compliant-blue?style=flat-square)](https://reuse.software/)
 
@@ -43,7 +44,7 @@ here, it is the *point*. There is an issue form for exactly that.
 New here? The fastest path is to let your agent do it:
 
 ```sh
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.0/moviola_protocol_mcp-0.3.0-py3-none-any.whl moviola doctor
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.1/moviola_protocol_mcp-0.3.1-py3-none-any.whl moviola doctor
 ```
 
 Exit 0 and a JSON block naming your `ffmpeg`, `ffprobe` and `ffplay` means
@@ -123,25 +124,99 @@ Until then this section is a promise, and promises are not results.
 
 ---
 
-## 🎞️ The presets — thirty seconds each, on camera
+## 🎞️ Presets — thirty seconds each, see with your own eyes
 
-One source, four renderings. The source is a 29.6 s, 1100×640, 10 fps screen
-recording (230,093 B mp4). Every GIF below is the direct output of the
-printed command — re-run one and compare bytes; a demo that does not
-reproduce is a failed demo.
+One source, five renderings. The source is a 29.6 s, 1100×640, 10 fps
+screen recording (230,093 B mp4). Every GIF below is the direct,
+unretouched output of its printed command at full width — re-run one
+and compare bytes; a demo that does not reproduce is a failed demo.
+This is what each preset *is*, what to *expect* from it, and what it
+is *for*.
 
-| Preset | The 30 seconds | Bytes | Dims · fps · frames |
-|:--|:--|--:|:--|
-| **A · Standard Moviola** | ![Standard Moviola: 8-bit grey, 8 colours](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/presets/doctor-standard.gif) | 189,882 | 1100×640 · 10 · 296 |
-| **B · Moviola Intersect** | ![Intersect: 1-bit Grey Ink](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/presets/doctor-intersect.gif) | 29,968 | 1100×640 · 10 · 296 |
-| **C · Intersect Torch** | ![Torch: 1-bit, 5 fps, 360p](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/presets/doctor-torch.gif) | 14,920 | 618×360 · 5 · 148 |
-| **D · Canine Tessersect** | ![Canine Tessersect: 16 instants per collage frame](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/presets/doctor-canine.gif) | 65,525 | 824×480 · 5.88 · 167 collages |
+### A · Standard Moviola — the evidence cut
+
+The canonical bench rendering: NTSC-J seated black, 8-bit grey,
+greyedge relief to keep light on letters and borders, then an
+8-colour two-pass palette with dither off. **Expect:** full
+resolution, soft 1940s-telecinema grey, text perfectly legible,
+motion smooth at 10–15 fps. **For:** evidence GIFs in issues, docs
+and chat — Proof-of-Work for the eyes.
+
+![Standard Moviola — 29.6 seconds, 8-bit grey, 8 colours, 189,882 bytes](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/presets/doctor-standard.gif)
+
+`189,882 B · 1100×640 · 10 fps · 296 frames · 641 B/frame`
 
 ```sh
-moviola convert doctor.mp4 doctor-standard.gif  --preset standard
+moviola convert doctor.mp4 doctor-standard.gif --preset standard
+```
+
+### B · Moviola Intersect — the 1-bit Grey Ink
+
+Everything Standard does, then the overcalc: luma stretched hard
+around mid-grey so faint edges, subtitles and contours cross the
+threshold into black, then a hard 1-bit cut. Two levels survive —
+black, and the grey ink (~192) that carries every border. **Expect:**
+a stark two-tone world where only information remains; gradients
+die, contours and text survive. **For:** subtitles, diagrams, UI,
+3D edges, anything whose meaning lives in its outlines.
+
+![Moviola Intersect — 29.6 seconds, 1-bit Grey Ink, 29,968 bytes](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/presets/doctor-intersect.gif)
+
+`29,968 B · 1100×640 · 10 fps · 296 frames · 101 B/frame`
+
+```sh
 moviola convert doctor.mp4 doctor-intersect.gif --preset intersect
-moviola convert doctor.mp4 doctor-torch.gif     --preset torch
-moviola convert doctor.mp4 doctor-canine.gif    --preset canine
+```
+
+### C · Moviola Intersect Torch — the training torch
+
+Intersect slowed to 5 fps and resized (360p default, 480p choosable,
+any ladder stage or DPI). Named for the projectionist's torch in the
+cutting room: just enough light to read the strip by. **Expect:**
+small, stark, deliberate frames — a documentary reduced to its
+readable skeleton. **For:** pre-training corpora, documentary
+archives, slide decks, anywhere a million frames must cost megabytes.
+
+![Intersect Torch — 29.6 seconds, 1-bit at 5 fps and 360p, 14,920 bytes](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/presets/doctor-torch.gif)
+
+`14,920 B · 618×360 · 5 fps · 148 frames · 101 B/frame`
+
+```sh
+moviola convert doctor.mp4 doctor-torch.gif --preset torch
+```
+
+### D · Canine Logic Moviola Tessersect — sixteen instants at once
+
+Sampling at 90 fps in the canine flicker band, every instant cut to
+a 120-line 1-bit cell, sixteen cells collaged into one 4×4
+tesseract-net frame, oldest top-left → newest bottom-right. **Expect:**
+a flashing contact-sheet of motion itself — read it left-to-right
+like time. **For:** training absorption at Intersect velocity:
+sixteen informational contents per ingested frame. Full doctrine in
+[Canine Logic & the Tessersect](#-canine-logic--the-tessersect).
+
+![Canine Logic Moviola Tessersect — 29.6 seconds as 167 collages of 16 instants, 65,525 bytes](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/presets/doctor-canine.gif)
+
+`65,525 B · 824×480 · 167 collages · 2,672 instants carried · 24.6 B/instant`
+
+```sh
+moviola convert doctor.mp4 doctor-canine.gif --preset canine
+```
+
+### Passthrough — what no discipline looks like
+
+No Moviola filter at all: the same 30 seconds as a plain 256-colour
+GIF. **Expect:** colour, dither noise — and a file 2.5× *larger* than
+the video it came from. This row exists so the four above never have
+to ask for trust. (As a converter it still earns its keep: gif→mp4
+with this preset is the OpenCode plugin transcode, pixel-faithful.)
+
+![Passthrough — 29.6 seconds with no Moviola discipline, 578,695 bytes](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/presets/doctor-passthrough.gif)
+
+`578,695 B · 1100×640 · 10 fps · 296 frames · ratio 2.52× the source`
+
+```sh
+moviola convert doctor.mp4 doctor-passthrough.gif --preset passthrough
 ```
 
 ### Every characteristic, side by side
@@ -236,11 +311,23 @@ growth is visible; the bytes in the tables are the direct first-pass
 cuts from the index, never the labeled presentation GIFs. Regenerate
 everything with `uv run python scripts/build_ladder.py`.
 
-| Variant | The ladder |
-|:--|:--|
-| **V1 · DPI metric** (Standard, `--dpi`) | ![DPI ladder](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/ladder/ladder-dpi.gif) |
-| **V2 · p resolution** (Intersect, `--height`) | ![p ladder](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/ladder/ladder-p.gif) |
-| **V3 · Torch** (1-bit, 5 fps) | ![Torch ladder](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/ladder/ladder-torch.gif) |
+**V1 · DPI metric** — Standard preset, stages chosen `--dpi` at a 10-inch
+reference width (192 → 128 → 85 → 62 → 43 → 21 DPI). Watch the grey
+levels hold legibility long after the pixel grid turns coarse:
+
+![DPI scaling ladder — Standard preset stepping 192 to 21 DPI at 10-inch reference](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/ladder/ladder-dpi.gif)
+
+**V2 · p resolution** — Intersect preset, stages chosen `--height`
+(1080p → 720p → 480p → 350p → 240p → 120p). One bit survives every
+stage; only the cell size grows:
+
+![p-resolution scaling ladder — Intersect preset stepping 1080p to 120p](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/ladder/ladder-p.gif)
+
+**V3 · Torch** — 1-bit at 5 fps on the same stages: the training cut.
+At 120p this source family runs 341 B/s — a 1 h 50 m documentary in
+roughly 2.25 MB:
+
+![Torch scaling ladder — 1-bit 5 fps stepping 1080p to 120p](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/ladder/ladder-torch.gif)
 
 | Stage | DPI @10in | V1 Standard B/s → 1 h 50 m | V2 Intersect B/s → 1 h 50 m | V3 Torch B/s → 1 h 50 m |
 |:--|--:|--:|--:|--:|
@@ -296,13 +383,13 @@ binary is a visible fact, not a mystery.
 uvx moviola-protocol-mcp
 
 # 2. From the GitHub release wheel
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.0/moviola_protocol_mcp-0.3.0-py3-none-any.whl moviola-protocol-mcp
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.1/moviola_protocol_mcp-0.3.1-py3-none-any.whl moviola-protocol-mcp
 
 # 3. Straight from the repository
 uvx --from git+https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP moviola-protocol-mcp
 ```
 
-For development: `git clone`, then `uv sync`, `uv run pytest` (38 tests),
+For development: `git clone`, then `uv sync`, `uv run pytest` (39 tests),
 `uv run moviola doctor`. Training extras install separately:
 `pip install 'moviola-protocol-mcp[torch]'` (or `[jax]`, `[maxtext]`,
 `[unsloth]`).
@@ -528,10 +615,42 @@ deck becomes 63 collage frames.
 
 ---
 
-## 🎓 For training enthusiasts
+## 🎓 HOW TO TRAIN with Moviola — the Special Datasets Philosophy
 
-This MCP is built as much for dataset builders as for developers. Three
-recipes, with the arithmetic printed:
+This MCP is built as much for dataset builders as for developers. Its
+training doctrine — the **Special Datasets Philosophy** — is six rules,
+each one enforced by a mechanism in this repository rather than by taste:
+
+1. **Information density over pixel fidelity.** A training instance is
+   worth its borders, text, contours and motion — the things the 1-bit
+   Grey Ink keeps — not its colour gradients. Measure bytes *per
+   instant of information*, not per frame of decoration.
+2. **Resolution is chosen, in DPI or p, per task — never max by
+   default.** A subtitle needs 240p; a viseme needs a cropped 240p at
+   90 fps; a glacier needs 120p and patience. The ladder exists so the
+   choice is a number with a price tag.
+3. **Every file carries its lineage.** Source hash, preset, stage,
+   argv and byte counts live in `moviola.db`; intertwined files chain.
+   A dataset you cannot audit is folklore.
+4. **Budgets are witnessed, not promised.** Rates come from indexed
+   cuts and the [witness bench](docs/witnesses/ladder-witnesses.md);
+   extrapolations are labeled with their formula.
+5. **Form is kept, appearance is discarded.** Grey and 1-bit cuts
+   preserve action, shape and text while shedding identity-rich
+   colour detail — useful far beyond size (see medicine, security).
+6. **Formats are training-native.** The same cut exports to torch
+   tensors, JAX arrays, image folders, WebDataset/Energon shards,
+   ArrayRecord and Unsloth SFT rows without a transcode detour.
+
+**The five-step pipeline, every time:**
+
+```sh
+moviola convert source.mp4 corpus.gif --preset torch --height 240   # 1 cut
+moviola stats                                                        # 2 read the ledger
+moviola export-dataset corpus.gif shards/ --format datacenter-shards # 3 export
+moviola backends                                                     # 4 check the stack
+uv run python scripts/demo_torch_dataset.py moviola.db               # 5 iterate it
+```
 
 **Documentary → laptop-scale corpus.** `convert_media` with `torch`
 (default 360p, 5 fps, 1-bit). At the doctor clip's worst-case 504 B/s, a
@@ -553,6 +672,127 @@ measure far below both anchors. Run one conversion, read your own
 `canine` turns an ordered folder of PNG/JPG (screenshots, code pages,
 document scans) into Tessersect flash frames at 90 cells/s ingestion
 velocity. Pair with `index_stats` to report exactly what the corpus cost.
+
+### Cross-domain atlas — where this format profits, camp by camp
+
+Each row names the instance, the cut, and the *measured property* of
+the format doing the work. Downstream accuracy on any of these is
+the falsifiable experiment the format invites — we measured the
+format, and say so.
+
+| Camp / sector | Training instance | Moviola cut | Why it profits (measured property) |
+|:--|:--|:--|:--|
+| 💻 Code & software | IDE/terminal recordings, bug repros, code-review walkthroughs | Torch @350p or Tessersect slideshow of code pages | text survives 1-bit overcalc at ~101 B/frame; 16 screens per collage token |
+| 👄 Labial language & speech | lip-reading (viseme) corpora, pronunciation tutors | Standard or Intersect on a mouth-ROI crop; Tessersect as a 16-instant **viseme transition strip** | greyedge relief is literally lip contour; a collage frame *is* a viseme sequence in one token |
+| 🤟 Sign language | signer recordings, fingerspelling at speed | Intersect native fps; Canine for transition strips | hand/face contours are the signal; background and clothing colour are noise the cut removes |
+| 🎬 Documentaries (subtitled) | subtitle-aligned understanding, chaptering, summarisation | Torch @360/240p | overcalc exists to push subtitle edges into black; ~2–3 MB per feature-length film at low stages |
+| 🔬 Biology — microscopy | cell division, motility, colony growth timelapse | Standard/Intersect, stage by DPI of the optics | phase-contrast is already grey; motion deltas are the phenotype; days of timelapse fit in MB |
+| 🐾 Biology — ethology | wildlife cams, lab animal behaviour, wing-beat analysis | Canine (90 fps band), Torch for archives | the preset was designed on the canine sensor model: motion first, appearance discarded |
+| 🌱 Agriculture | crop growth, pest traps, livestock gait & feeding | Torch @120–240p | solar/field cameras on thin links: 341 B/s worst-case measured is satellite-friendly |
+| 🪨 Geology | glacier/erosion timelapse, strata & core-sample photography, volcano cams | Intersect (strata lines are contours), slideshow decks for cores | contour emphasis *is* the geological signal; 120p stages archive years of timelapse |
+| 🩺 Medicine | ultrasound & endoscopy teaching sets, gait labs, surgical gesture | Standard (8-bit keeps intra-tissue shading) | ultrasound is born grey; 1-bit variants abstract identity while keeping motion — de-identification as a side effect, to validate per use |
+| 🔭 Astronomy | meteor/all-sky cameras, variable-star & transient hunts | Intersect/Canine | a transient is a delta against black; the format stores almost nothing else |
+| 🏭 Industry | weld-arc monitoring, assembly verification, vibration made visible | Canine 90 fps cells | high-frequency events survive sampling that 25 fps corpora alias away |
+| 🤖 Robotics & edge AI | drone/warehouse contour navigation, low-bandwidth telemetry previews | Torch/Canine at 120–240p | obstacle contours at ~25 B/instant ride links video cannot |
+| 🏅 Sport & movement | technique biomechanics, dance notation, instrument fingering (piano/violin hands) | Canine strips; Standard for fine hand detail | 16-instant collages turn a gesture phrase into one training token |
+| 🎓 Education | lectures, whiteboard capture, handwriting stroke order | Torch; slideshows for boards | whiteboard ink is a 1-bit signal already; ~1.8 MB per lecture-hour measured class |
+| 🌍 Environment | river/fire/weather cams, ocean buoys, disaster-field feeds | Torch @120p | the kilobaud link is the dataset constraint; this format was priced for it |
+| 🚗 Automotive | dashcam event archives, driver-attention contours | Intersect @350/240p | events kept, plates/faces abstracted by the cut (validate per jurisdiction) |
+| 🏗️ Construction | site progress timelapse, crack & deformation monitoring | Intersect | a crack is a contour that grows; the ledger timestamps every cut of it |
+| 🧪 Physical sciences | crystallisation, fluid fronts, oscillation & reaction timelapse | Standard/Canine by rate | density fronts read in grey levels; fast periodic motion needs the 90 fps band |
+| 🛰️ Space & remote sensing | downlink-constrained preview imagery, ground-station triage | Torch @120p | when downlink is priced per byte, 341 B/s full-motion preview is a capability, not a compromise |
+| 🏛️ Archives & restoration | historical film pre-visualisation, archive search proxies | Standard @480p+ | a searchable grey proxy of a whole archive at ~1% of mezzanine cost |
+
+### Worked recipe — labial language (viseme strips)
+
+```sh
+# 1) crop the mouth region first (ffmpeg) - resolution belongs to the lips
+ffmpeg -i speaker.mp4 -vf "crop=iw/3:ih/3:(iw-iw/3)/2:ih/2" mouth.mp4
+# 2a) outer-lip contour corpus (1-bit)
+moviola convert mouth.mp4 visemes.gif --preset intersect --height 240
+# 2b) viseme transition strips: 16 instants per training token
+moviola convert mouth.mp4 viseme-strips.gif --preset canine
+# 3) cells back out as instances when the model wants them single
+#    MoviolaFrameDataset(..., unpack_collage=True)  -> 16 per collage
+```
+
+Honest trade-off, printed: intra-oral detail (tongue, teeth shading)
+wants Standard's 8-bit grey; outer-lip contour is where Intersect
+wins. Choose per annotation goal, and let downstream accuracy —
+measured by you, on your split — arbitrate.
+
+### Worked recipe — subtitled documentaries
+
+```sh
+moviola convert film.mp4 film-torch.gif --preset torch --height 240
+moviola export-dataset film-torch.gif film-shards/ --format datacenter-shards
+```
+
+Pair each shard's `.json` (source + frame index) with the film's
+subtitle track by timestamp (`frame / fps` from `probe_media`) and
+the corpus aligns itself: frame, subtitle line, provenance — at
+roughly 400–500 B/s of film on animated content (doctor-clip rate),
+far less on talking-head footage.
+
+### Worked recipe — tomes, big-page books, medical atlases, whole libraries
+
+A book is a slideshow that already knows its order. Big dense pages —
+anatomy atlases, surgical and pharmacology tomes, engineering
+handbooks, manuscripts, sheet-music folios — are the format's home
+ground: page after page of text, plates and contour line-art, which
+is exactly what Grey Ink was cut for. Measured on generated
+dense-text A4 pages (1240×1754, ~314 KB PNG each; reproduce the
+bench from the commands below):
+
+| Form | Per page | 1,000-page tome | 10⁷ pages (a library) |
+|:--|--:|--:|--:|
+| Source PNG scan | ~314,000 B | 314 MB | 3.14 TB |
+| Standard slideshow | 25,903 B | 25.9 MB | 259 GB |
+| Torch slideshow | **1,690 B** | **1.69 MB** | **16.9 GB** |
+| Canine Tessersect deck | **331 B** | **0.33 MB** | **3.3 GB** |
+
+```sh
+# one tome, Torch training cut (pages in reading order)
+moviola slideshow atlas/page-*.png atlas-torch.gif --preset torch
+# the same tome as flash cells: 16 pages ride in every collage frame
+moviola slideshow atlas/page-*.png atlas-flash.gif --preset canine
+# shards for the cluster, or SFT rows for a vision model
+moviola export-dataset atlas/ shards/ --format datacenter-shards
+moviola export-dataset atlas/ unsloth/ --format unsloth \
+  --instruction "Transcribe and explain this atlas plate."
+```
+
+That is the "almost indefinite" scaling stated precisely: cost grows
+linearly at **hundreds of bytes per page**, so corpus size stops
+being the constraint long before library size does — a billion-page
+archive extrapolates to ~331 GB in Tessersect form on this page
+family (arithmetic from the measured 331 B/page; noisy real-world
+scans will cost more, and your index will tell you how much on the
+first tome). Medicine is the flagship case: anatomy plates,
+radiology teaching files and surgical atlases are contour-and-text
+documents whose training value survives 1-bit intact, at three
+orders of magnitude under their scan weight.
+
+### Worked recipe — biology & geology timelapse
+
+```sh
+# a season of field stills becomes one flash deck, then shards
+moviola slideshow field/*.jpg season.gif --preset canine
+moviola export-dataset season.gif season-shards/ --format webdataset
+```
+
+Growth, erosion and strata are contour stories told slowly; the
+Tessersect deck compresses the *telling* without touching the story:
+16 observation days ride in every ingested frame.
+
+> **How Moviola redefines the training world, claimed precisely:**
+> datasets stop being maximal-fidelity dumps priced in terabytes and
+> become *measured informational cuts* — resolution chosen in DPI or
+> p per task, bytes witnessed per instant, lineage in a ledger, and
+> 16 instants flashing per token where time itself is the signal.
+> That redefinition is shipped and measured above. What it does to
+> any given model's accuracy is the experiment this format exists
+> to make cheap enough to run.
 
 ### TorchPy — one Dataset, every framework, no NVIDIA required
 
@@ -669,7 +909,7 @@ Yours will differ. It is supposed to.
 git clone https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP.git
 cd Moviola-Protocol-MCP
 uv sync
-uv run pytest            # 38 tests: acceptance, presets, index, behaviours,
+uv run pytest            # 39 tests: acceptance, presets, index, behaviours,
                          # DPI, TorchPy bridge, backends, MCP session, egg
 uv run moviola doctor    # trio + version, exit 0
 uv run moviola backends  # what this host can and cannot train on

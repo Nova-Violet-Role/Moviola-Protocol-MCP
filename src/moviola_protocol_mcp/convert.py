@@ -242,8 +242,31 @@ def convert_media(
     trio = locate_trio(ffmpeg_dir)
     facts = probe_media(source, trio.ffprobe)
     effective_height = _resolve_height(height, dpi, reference_width_inches, facts)
+    output_path = Path(output)
+    still_input = facts.get("frames") == 1 or (
+        source_path.suffix.lower() in IMAGE_OUTPUTS and facts.get("frames") in (None, 1)
+    )
+    animated_output = output_path.suffix.lower() not in IMAGE_OUTPUTS or (
+        output_path.suffix.lower() == ".webp"
+    )
+    if still_input and animated_output:
+        # A lone still frame is swallowed by the fps stage and the
+        # GIF muxer refuses its trailer; loop the still for one
+        # second so animated outputs carry real frames.
+        input_args = [
+            "-loop",
+            "1",
+            "-framerate",
+            str(fps or chosen.default_fps),
+            "-t",
+            "1",
+            "-i",
+            str(source_path),
+        ]
+    else:
+        input_args = ["-i", str(source_path)]
     result = _run_conversion(
-        input_args=["-i", str(source_path)],
+        input_args=input_args,
         source_label=str(source_path),
         source_bytes=source_path.stat().st_size,
         source_facts=facts,

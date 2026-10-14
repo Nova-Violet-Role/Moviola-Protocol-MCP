@@ -1,3 +1,3 @@
 """Moviola Protocol MCP: grey-preset media conversion with an indexed ledger."""
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"

@@ -161,6 +161,20 @@ def test_canine_tessersect_treats_each_slideshow_image_as_one_cell(
     assert facts["height"] == 480
 
 
+def test_a_single_still_image_becomes_a_real_gif_not_an_empty_one(
+    ffmpeg: str, tmp_path: Path
+) -> None:
+    # Regression: the fps stage used to swallow the only frame of a
+    # still image, and the GIF muxer then refused its own trailer.
+    db = str(tmp_path / "moviola.db")
+    png = _png(ffmpeg, tmp_path / "page.png", "navy", "TOME PLATE I")
+    gif = tmp_path / "page.gif"
+    convert_media(str(png), str(gif), preset="standard", db_path=db)
+    facts = probe_media(str(gif), locate_trio().ffprobe)
+    assert gif.stat().st_size > 0
+    assert facts["frames"] is not None and facts["frames"] >= 1
+
+
 def test_missing_source_is_refused_by_name(tmp_path: Path) -> None:
     with pytest.raises(Exception, match="source not found"):
         convert_media(
