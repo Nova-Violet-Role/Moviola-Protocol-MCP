@@ -146,6 +146,7 @@ def probe_media(path: str, ffprobe: Path | None) -> dict:
             "json",
             str(target),
         ],
+        stdin=subprocess.DEVNULL,
         capture_output=True,
         text=True,
         timeout=120,
@@ -177,10 +178,16 @@ def probe_media(path: str, ffprobe: Path | None) -> dict:
 
 
 def run_ffmpeg(args: list[str], timeout_seconds: int = 7200) -> None:
-    """Run ffmpeg in the foreground; a nonzero exit raises with its tail."""
+    """Run ffmpeg in the foreground; a nonzero exit raises with its tail.
+
+    stdin is always DEVNULL: inside an MCP stdio server, inherited
+    stdin is the JSON-RPC pipe, and ffmpeg must never read or wait
+    on the transport that carries the tool call itself.
+    """
     try:
         run = subprocess.run(
             args,
+            stdin=subprocess.DEVNULL,
             capture_output=True,
             text=True,
             timeout=timeout_seconds,
@@ -196,7 +203,11 @@ def run_ffmpeg(args: list[str], timeout_seconds: int = 7200) -> None:
 
 def ffmpeg_version(ffmpeg: Path) -> str | None:
     run = subprocess.run(
-        [str(ffmpeg), "-version"], capture_output=True, text=True, timeout=30
+        [str(ffmpeg), "-version"],
+        stdin=subprocess.DEVNULL,
+        capture_output=True,
+        text=True,
+        timeout=30,
     )
     if run.returncode != 0:
         return None

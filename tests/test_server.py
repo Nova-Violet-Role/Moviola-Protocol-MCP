@@ -44,6 +44,55 @@ def test_the_mcp_server_lists_eleven_tools_and_answers_list_presets() -> None:
     assert content, "list_presets returned no content"
 
 
+async def _progress_session(
+    tmp_path: Path,
+) -> tuple[list[tuple[float, float | None, str | None]], list]:
+    progress_events: list[tuple[float, float | None, str | None]] = []
+    logs: list = []
+
+    async def on_progress(
+        progress: float, total: float | None, message: str | None = None
+    ) -> None:
+        progress_events.append((progress, total, message))
+
+    async def on_log(params) -> None:  # noqa: ANN001 - SDK notification object
+        logs.append(params)
+
+    source = (
+        Path(__file__).resolve().parents[1] / "docs" / "presets" / "doctor-torch.gif"
+    )
+    params = StdioServerParameters(
+        command=sys.executable,
+        args=["-m", "moviola_protocol_mcp.server"],
+    )
+    async with stdio_client(params) as (read, write):
+        async with ClientSession(read, write, logging_callback=on_log) as session:
+            await session.initialize()
+            result = await session.call_tool(
+                "convert_media",
+                {
+                    "source": str(source),
+                    "output": str(tmp_path / "progress-intersect.gif"),
+                    "preset": "intersect",
+                    "db_path": str(tmp_path / "progress.db"),
+                },
+                progress_callback=on_progress,
+            )
+            assert not result.isError, result.content
+            assert (tmp_path / "progress-intersect.gif").exists()
+    return progress_events, logs
+
+
+def test_convert_media_reports_progress_during_real_mcp_session(
+    tmp_path: Path,
+) -> None:
+    progress_events, logs = asyncio.run(_progress_session(tmp_path))
+    assert progress_events, "convert_media sent no progress notifications"
+    assert progress_events[0][0] == 0.0
+    assert progress_events[-1][0] == 1.0
+    assert logs, "convert_media sent no log notifications"
+
+
 def test_install_plugin_writes_mjs_plugin_and_read_tool(tmp_path: Path) -> None:
     from moviola_protocol_mcp.plugin_install import install_opencode_plugin
 

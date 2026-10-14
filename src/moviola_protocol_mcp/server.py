@@ -10,7 +10,10 @@ convert.py and the training bridges; this module adapts arguments.
 
 from __future__ import annotations
 
-from mcp.server.fastmcp import FastMCP
+import asyncio
+from typing import Any, Callable
+
+from mcp.server.fastmcp import Context, FastMCP
 
 from .convert import convert_media as _convert_media
 from .convert import slideshow_from_images as _slideshow_from_images
@@ -24,8 +27,58 @@ from .training_backends import export_training_data as _export_training_data
 mcp = FastMCP("moviola-protocol-mcp")
 
 
+async def _run_with_heartbeat(
+    ctx: Context | None,
+    label: str,
+    func: Callable[..., Any],
+    *args: Any,
+    **kwargs: Any,
+) -> Any:
+    """Run a long synchronous core call while narrating it.
+
+    A conversion that stays silent for minutes looks dead to any
+    client with a ceiling, and the client reports failure for work
+    that succeeded (measured: a 2-second encode timed out client-side
+    after minutes of silence). The heartbeat reports staged progress
+    every few seconds so the call stays visibly alive; it never
+    changes what the core computes. Progress reporting failures are
+    swallowed - a mute client must never break a conversion.
+    """
+    if ctx is None:
+        return func(*args, **kwargs)
+    worker = asyncio.to_thread(func, *args, **kwargs)
+    worker_task = asyncio.ensure_future(worker)
+    ticks = 0
+    try:
+        await ctx.info(f"{label}: started")
+        try:
+            await ctx.report_progress(0.0, 1.0, f"{label}: started")
+        except Exception:
+            pass
+        while not worker_task.done():
+            try:
+                await asyncio.wait_for(asyncio.shield(worker_task), timeout=5.0)
+            except asyncio.TimeoutError:
+                ticks += 1
+                fraction = min(0.05 + 0.1 * ticks, 0.9)
+                try:
+                    await ctx.report_progress(fraction, 1.0, f"{label}: still working")
+                except Exception:
+                    pass
+        result = await worker_task
+        try:
+            await ctx.report_progress(1.0, 1.0, f"{label}: done")
+            await ctx.info(f"{label}: done")
+        except Exception:
+            pass
+        return result
+    finally:
+        if not worker_task.done():
+            worker_task.cancel()
+
+
 @mcp.tool()
-def convert_media(
+async def convert_media(
     source: str,
     output: str,
     preset: str = "standard",
@@ -38,6 +91,7 @@ def convert_media(
     ffmpeg_dir: str | None = None,
     timeout_seconds: int = 7200,
     verbose: bool = False,
+    ctx: Context | None = None,
 ) -> dict:
     """Convert any video/image file to the output path's format.
 
@@ -53,7 +107,10 @@ def convert_media(
     recorded in moviola.db; the result carries before/after bytes
     and the ratio.
     """
-    return _convert_media(
+    return await _run_with_heartbeat(
+        ctx,
+        f"convert {preset}",
+        _convert_media,
         source=source,
         output=output,
         preset=preset,
@@ -70,7 +127,7 @@ def convert_media(
 
 
 @mcp.tool()
-def slideshow_from_images(
+async def slideshow_from_images(
     images: list[str],
     output: str,
     preset: str = "torch",
@@ -83,6 +140,7 @@ def slideshow_from_images(
     ffmpeg_dir: str | None = None,
     timeout_seconds: int = 7200,
     verbose: bool = False,
+    ctx: Context | None = None,
 ) -> dict:
     """Build a slideshow (gif/mp4/webp) from PNG/JPG images, in order.
 
@@ -90,7 +148,10 @@ def slideshow_from_images(
     pre-training form: five 1-bit grey frames per second, legible
     for text- and code-rich images at a few hundred bytes a frame.
     """
-    return _slideshow_from_images(
+    return await _run_with_heartbeat(
+        ctx,
+        f"slideshow {preset}",
+        _slideshow_from_images,
         images=images,
         output=output,
         preset=preset,
@@ -181,7 +242,7 @@ def training_backends() -> dict:
 
 
 @mcp.tool()
-def export_training_data(
+async def export_training_data(
     sources: list[str],
     out: str,
     format: str = "webdataset",
@@ -192,6 +253,7 @@ def export_training_data(
     instruction: str = "Describe this Moviola grey frame.",
     ffmpeg_dir: str | None = None,
     timeout_seconds: int = 7200,
+    ctx: Context | None = None,
 ) -> dict:
     """Export Moviola frames as a training dataset in one of five layouts.
 
@@ -202,7 +264,10 @@ def export_training_data(
     height chooses a ladder stage in lines, dpi in pixels-per-inch
     at the reference width.
     """
-    return _export_training_data(
+    return await _run_with_heartbeat(
+        ctx,
+        f"export {format}",
+        _export_training_data,
         sources=sources,
         out=out,
         format=format,

@@ -21,7 +21,7 @@ Grey Ink, and a 90 fps collage that flashes sixteen instants per frame*
 [![PyPI](https://img.shields.io/pypi/v/moviola-protocol-mcp?style=flat-square)](https://pypi.org/project/moviola-protocol-mcp/)
 [![MCP stdio](https://img.shields.io/badge/MCP-stdio%20%C2%B7%2011%20tools-2C3E50?style=flat-square)](#-mcp-tools--every-tool-every-argument)
 [![UVX](https://img.shields.io/badge/UVX-wheel%20verified%20clean--room-27ae60?style=flat-square)](#-install)
-[![Tests](https://img.shields.io/badge/tests-41%20passing%20%C2%B7%205%20gates-27ae60?style=flat-square)](#-verify-it-yourself)
+[![Tests](https://img.shields.io/badge/tests-45%20passing%20%C2%B7%205%20gates-27ae60?style=flat-square)](#-verify-it-yourself)
 [![ffmpeg trio](https://img.shields.io/badge/ffmpeg-ffprobe%20%C2%B7%20ffplay-374151?style=flat-square)](#requirements)
 [![REUSE](https://img.shields.io/badge/REUSE-compliant-blue?style=flat-square)](https://reuse.software/)
 
@@ -44,7 +44,7 @@ here, it is the *point*. There is an issue form for exactly that.
 New here? The fastest path is to let your agent do it:
 
 ```sh
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.3/moviola_protocol_mcp-0.3.3-py3-none-any.whl moviola doctor
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.4/moviola_protocol_mcp-0.3.4-py3-none-any.whl moviola doctor
 ```
 
 Exit 0 and a JSON block naming your `ffmpeg`, `ffprobe` and `ffplay` means
@@ -431,13 +431,13 @@ binary is a visible fact, not a mystery.
 uvx moviola-protocol-mcp
 
 # 2. From the GitHub release wheel
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.3/moviola_protocol_mcp-0.3.3-py3-none-any.whl moviola-protocol-mcp
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.4/moviola_protocol_mcp-0.3.4-py3-none-any.whl moviola-protocol-mcp
 
 # 3. Straight from the repository
 uvx --from git+https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP moviola-protocol-mcp
 ```
 
-For development: `git clone`, then `uv sync`, `uv run pytest` (41 tests),
+For development: `git clone`, then `uv sync`, `uv run pytest` (45 tests),
 `uv run moviola doctor`. Training extras install separately:
 `pip install 'moviola-protocol-mcp[torch]'` (or `[jax]`, `[maxtext]`,
 `[unsloth]`).
@@ -480,6 +480,19 @@ shapes the pixels; the extension chooses the container.
 | `db_path` | string\|null | `./moviola.db` | index location (`MOVIOLA_DB` if set) |
 | `ffmpeg_dir` | string\|null | auto | directory holding the trio |
 | `timeout_seconds` | int | 7200 | hard ceiling; expiry is a named error, recorded in the index |
+
+**Progress & timeouts.** Long calls (`convert_media`,
+`slideshow_from_images`, `export_training_data`) narrate themselves:
+an immediate 0.0 progress report, staged heartbeats while ffmpeg
+works, and 1.0 when the index row lands — silence is never the
+signal. If a *client* still times out, **do not re-run blindly**:
+probe the output path and read `index_history` first. The ledger
+row is the completion certificate; a cut recorded `status: ok`
+happened whether or not the caller was still listening. Fire one
+conversion at a time — two parallel encodes split the same CPU and
+can turn two 2-second cuts into one client-side timeout. Every
+ffmpeg/ffprobe child runs with stdin closed (`DEVNULL`), because
+inside an MCP stdio server inherited stdin *is* the JSON-RPC pipe.
 
 Returns: `{id, source, source_bytes, output, output_bytes, preset, fps,
 height, ratio, bytes_saved, db_path, ffmpeg, command}` — the exact argv is
@@ -983,7 +996,7 @@ guards, Reading Steiner as SQLite — are in
 git clone https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP.git
 cd Moviola-Protocol-MCP
 uv sync
-uv run pytest            # 41 tests: acceptance, presets, index, behaviours,
+uv run pytest            # 45 tests: acceptance, presets, index, behaviours,
                          # DPI, TorchPy bridge, backends, verbose, MCP, egg
 uv run python scripts/verify_all.py   # the quintuple check: suite, encoding,
                          # instruments+alarms, clean-room wheel, statement audit
@@ -1001,7 +1014,11 @@ The acceptance test was written first and watched fail
 existed. The wheel you install was verified by *listing its contents* —
 which caught, and killed, a first build that contained nothing but
 metadata — and by running it clean-room from a bare temp directory
-against the reference clip. An instrument that has never failed on
+against the reference clip. The quintuple check later caught two more
+live defects by measurement: SQLite connections that never closed, and
+ffmpeg children inheriting the MCP stdio pipe as stdin (a 1.7-second
+encode reported as a multi-minute timeout until stdin was closed and
+progress narration shipped). An instrument that has never failed on
 purpose is an untested instrument; every instrument here has been
 failed on purpose.
 
