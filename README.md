@@ -292,15 +292,14 @@ binary is a visible fact, not a mystery.
 ### Three ways in
 
 ```sh
-# 1. From the GitHub release wheel (today's verified path)
+# 1. From PyPI (live since 0.3.0)
+uvx moviola-protocol-mcp
+
+# 2. From the GitHub release wheel
 uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.0/moviola_protocol_mcp-0.3.0-py3-none-any.whl moviola-protocol-mcp
 
-# 2. Straight from the repository
+# 3. Straight from the repository
 uvx --from git+https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP moviola-protocol-mcp
-
-# 3. From PyPI — the name `moviola-protocol-mcp` is reserved-free and the
-#    metadata is ready; the first upload waits on a project token.
-uvx moviola-protocol-mcp        # after the PyPI upload lands
 ```
 
 For development: `git clone`, then `uv sync`, `uv run pytest` (38 tests),
