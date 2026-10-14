@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 
 from .convert import convert_media, slideshow_from_images
@@ -34,6 +35,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="moviola",
         description="Moviola Protocol: grey-preset media conversion with an indexed ledger.",
+    )
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="trace trio, derivations, filter chains, argv and index rows to stderr",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -129,6 +135,8 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if getattr(args, "verbose", False):
+        os.environ["MOVIOLA_VERBOSE"] = "1"
     try:
         if args.command == "convert":
             _print(

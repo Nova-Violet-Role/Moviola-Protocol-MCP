@@ -1,0 +1,65 @@
+<!-- SPDX-License-Identifier: AGPL-3.0-or-later OR EUPL-1.2 -->
+<!-- Copyright 2026 Saimonokuma. Original schematic illustration, drawn for this
+     project in 2026: a 1940s-style Moviola film editing machine reimagined as
+     the Holistic Tape viewer of the Moviola papers. It is an illustrative
+     render, not a historical photograph or artifact. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
+  <rect x="0" y="0" width="1600" height="1000" fill="#f4f1e8"/>
+  <g fill="none" stroke="#191919" stroke-width="7" stroke-linecap="round">
+    <!-- table -->
+    <rect x="120" y="800" width="1360" height="42" fill="#d8d2c2"/>
+    <line x1="190" y1="842" x2="150" y2="960"/>
+    <line x1="1410" y1="842" x2="1450" y2="960"/>
+    <!-- left supply reel -->
+    <circle cx="360" cy="330" r="190"/>
+    <circle cx="360" cy="330" r="34"/>
+    <line x1="360" y1="140" x2="360" y2="520"/>
+    <line x1="170" y1="330" x2="550" y2="330"/>
+    <line x1="226" y1="196" x2="494" y2="464"/>
+    <line x1="494" y1="196" x2="226" y2="464"/>
+    <!-- right take-up reel -->
+    <circle cx="1240" cy="330" r="190"/>
+    <circle cx="1240" cy="330" r="34"/>
+    <line x1="1240" y1="140" x2="1240" y2="520"/>
+    <line x1="1050" y1="330" x2="1430" y2="330"/>
+    <line x1="1106" y1="196" x2="1374" y2="464"/>
+    <line x1="1374" y1="196" x2="1106" y2="464"/>
+    <!-- reel stands -->
+    <line x1="360" y1="520" x2="360" y2="800"/>
+    <line x1="1240" y1="520" x2="1240" y2="800"/>
+    <!-- central viewer hood -->
+    <polygon points="610,800 700,430 900,430 990,800" fill="#e7e1cf"/>
+    <rect x="688" y="470" width="224" height="150" fill="#ffffff"/>
+    <rect x="688" y="470" width="224" height="150"/>
+    <!-- holo shimmer over screen: the holistic image -->
+    <g stroke="#5a5a5a" stroke-width="3">
+      <line x1="700" y1="600" x2="900" y2="490"/>
+      <line x1="700" y1="570" x2="872" y2="470"/>
+      <line x1="728" y1="620" x2="900" y2="520"/>
+      <circle cx="800" cy="545" r="30"/>
+    </g>
+    <!-- lamp house -->
+    <rect x="742" y="650" width="116" height="70" fill="#d8d2c2"/>
+    <line x1="800" y1="650" x2="800" y2="620"/>
+    <!-- film path: left reel -> rollers -> gate -> rollers -> right reel -->
+    <polyline points="470,470 585,585 688,600 912,600 1020,585 1130,470" stroke-width="5"/>
+    <circle cx="585" cy="585" r="20"/>
+    <circle cx="1020" cy="585" r="20"/>
+    <!-- crank -->
+    <line x1="990" y1="740" x2="1080" y2="740"/>
+    <line x1="1080" y1="740" x2="1080" y2="690"/>
+    <circle cx="1080" cy="678" r="14"/>
+    <!-- sound head box -->
+    <rect x="470" y="720" width="130" height="56" fill="#d8d2c2"/>
+  </g>
+  <g font-family="monospace" fill="#191919">
+    <text x="800" y="70" font-size="46" text-anchor="middle">HOLISTIC TAPE VIEWER - MOVIOLA TECHNIQUE, c.1940 (REIMAGINED)</text>
+    <text x="360" y="575" font-size="30" text-anchor="middle">SUPPLY REEL</text>
+    <text x="1240" y="575" font-size="30" text-anchor="middle">TAKE-UP REEL</text>
+    <text x="800" y="415" font-size="30" text-anchor="middle">VIEWER SCREEN</text>
+    <text x="800" y="760" font-size="26" text-anchor="middle">LAMP HOUSE + FILM GATE</text>
+    <text x="535" y="700" font-size="24" text-anchor="middle">SOUND HEAD</text>
+    <text x="1120" y="790" font-size="24">HAND CRANK - 90 FRAMES OF WILL</text>
+    <text x="800" y="925" font-size="28" text-anchor="middle">GREY INK IN - CONTOUR OUT - THE LEDGER REMEMBERS</text>
+  </g>
+</svg>

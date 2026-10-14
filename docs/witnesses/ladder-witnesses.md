@@ -10,7 +10,7 @@ Every preset × stage over three real source families. Each row is
 one indexed `convert_media` cut; every number names its instrument
 in the metrics table. Anomalies stay in the tables.
 
-- Package: moviola-protocol-mcp 0.3.0
+- Package: moviola-protocol-mcp 0.3.1
 - ffmpeg: `ffmpeg version N-123549-g70537ec8e6 Copyright (c) 2000-2026 the FFmpeg developers` at `C:\Hybrid\64bit\ffmpeg.exe`
 - ffprobe: `C:\Hybrid\64bit\ffprobe.exe`
 
@@ -81,7 +81,7 @@ in the metrics table. Anomalies stay in the tables.
 
 ## Source: synthetic 1080p text/code
 
-`C:\Users\Saimono\AppData\Local\Temp\moviola-witnesses-l69lhggm\source-1080p-text.mp4` — sha256 `3f8009f83af3e394…`, 284020 B, 1920×1080, 30.0 fps, 12.0 s, h264
+`C:\Users\Saimono\AppData\Local\Temp\moviola-witnesses-p9maxcii\source-1080p-text.mp4` — sha256 `3f8009f83af3e394…`, 284020 B, 1920×1080, 30.0 fps, 12.0 s, h264
 
 | Preset | Stage | Out dims | Bytes | Ratio | B/s | B/frame | MB/1h50m | Levels | Integrity |
 |:--|:--|:--|--:|--:|--:|--:|--:|--:|:--|

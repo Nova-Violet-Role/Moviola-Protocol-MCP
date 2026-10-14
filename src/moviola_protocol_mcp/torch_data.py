@@ -26,7 +26,7 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
-from .convert import height_for_dpi
+from .convert import DebugLog, height_for_dpi, verbose_enabled
 from .ffmpeg_tools import ConversionError, locate_trio, probe_media, run_ffmpeg
 from .index_db import list_conversions
 
@@ -110,6 +110,7 @@ def extract_gray_frames(
     reference_width_inches: float = 10.0,
     ffmpeg_dir: str | None = None,
     timeout_seconds: int = 7200,
+    verbose: bool | None = None,
 ) -> GrayFrames:
     """Decode every frame of a media file to 8-bit grey bytes.
 
@@ -117,11 +118,15 @@ def extract_gray_frames(
     images). height selects a ladder stage in lines; dpi selects it
     in pixels-per-inch at the reference width. Never upscales.
     """
+    debug = DebugLog(verbose_enabled(verbose))
     trio = locate_trio(ffmpeg_dir)
     if trio.ffmpeg is None:
         raise ConversionError("ffmpeg not found; see doctor for searched paths")
     facts = probe_media(path, trio.ffprobe)
     out_w, out_h = _target_dims(facts, height, dpi, reference_width_inches)
+    debug(
+        f"extract {path}: source={facts.get('width')}x{facts.get('height')} target={out_w}x{out_h}"
+    )
     # fps_mode passthrough: one output frame per stored frame, always.
     # The default vsync resamples fractional GIF rates (100/17) and
     # silently duplicates instances into a dataset - measured 334
@@ -150,6 +155,7 @@ def extract_gray_frames(
         )
     frame_size = out_w * out_h
     count = len(run.stdout) // frame_size if frame_size else 0
+    debug(f"extracted frames={count} bytes={len(run.stdout)}")
     return GrayFrames(
         data=run.stdout[: count * frame_size],
         frames=count,

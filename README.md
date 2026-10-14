@@ -21,7 +21,7 @@ Grey Ink, and a 90 fps collage that flashes sixteen instants per frame*
 [![PyPI](https://img.shields.io/pypi/v/moviola-protocol-mcp?style=flat-square)](https://pypi.org/project/moviola-protocol-mcp/)
 [![MCP stdio](https://img.shields.io/badge/MCP-stdio%20%C2%B7%2011%20tools-2C3E50?style=flat-square)](#-mcp-tools--every-tool-every-argument)
 [![UVX](https://img.shields.io/badge/UVX-wheel%20verified%20clean--room-27ae60?style=flat-square)](#-install)
-[![Tests](https://img.shields.io/badge/tests-39%20passing-27ae60?style=flat-square)](#-verify-it-yourself)
+[![Tests](https://img.shields.io/badge/tests-41%20passing%20%C2%B7%205%20gates-27ae60?style=flat-square)](#-verify-it-yourself)
 [![ffmpeg trio](https://img.shields.io/badge/ffmpeg-ffprobe%20%C2%B7%20ffplay-374151?style=flat-square)](#requirements)
 [![REUSE](https://img.shields.io/badge/REUSE-compliant-blue?style=flat-square)](https://reuse.software/)
 
@@ -121,6 +121,54 @@ Until then this section is a promise, and promises are not results.
 > that remembers every cut — that is how Symbiose will look at the world
 > when the world is ready to be looked at that way. Forty years is not a
 > delay. It is a measurement we have not yet earned the right to shorten.*
+
+### 📽️ The 1940 reference — Holistic Tape
+
+The name comes from a real machine and a real practice. The
+machine: the **Moviola** film editor (invented 1924 by Iwan
+Serrurier) ruled the cutting rooms of the 1930s–40s — two reels, a
+small viewing screen, a lamp house and a hand crank, one editor
+communing with the strip frame by frame. The practice: in the
+silent era the tape carried **no sound at all**, so the sound was
+a person — the *benshi* beside the screen in Japan, the lecturer,
+musicians and effects hands **under the stage** in the West,
+voicing and sounding everything the strip could not. And the
+strip itself was nitrate stock, which could quite literally
+**burn in the projector gate** under the lamp: a burned tape was
+not a metaphor in those booths, it was a Tuesday. Our bench
+doctrine keeps the memory in its first lines: *"In the cutting
+rooms of the forties they cut monochrome stock, and under the
+stage a chronist spoke the parts the silent film could not
+carry."* **Holistic Tape** is this project's name for that whole
+apparatus — silent grey strip plus the living voice under the
+theatre, picture and narration as one event — which is why every
+Moviola cut is silent by construction and its chronist, the
+index, speaks below in numbers. (For the record, one adjacent
+word kept honest: holography as a technique is Gabor, 1947,
+practical in the 1960s; nothing here claims a holographic
+projector in a 1940 booth — the holism was human.)
+
+So we rendered it — an original schematic, drawn for this project,
+then cut through the very presets it illustrates. Standard first,
+at full width:
+
+![Holistic Tape viewer schematic rendered with the Standard Moviola preset](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/holo/moviola-machine-standard.png)
+
+… and the same machine seen by the Canine Tessersect — the sensor
+its inventors would have needed and did not live to build:
+
+![Holistic Tape viewer through the Canine Tessersect](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/holo/moviola-machine-canine.gif)
+
+`Source drawing 76,619 B → Standard 67,834 B · Intersect 37,882 B ·
+Torch 18,459 B · Canine 20,978 B — renders in docs/holo/,
+regenerate from moviola-machine.svg`
+
+Every silent-era house already ran on Holistic Tape: a silent
+grey strip absorbing the audience at sixteen-to-twenty-four
+instants a second while a voice under the stage assembled the
+world around it. Moviola writes the tape the way that room always
+read it — contour and motion on the strip, the chronist speaking
+below in the ledger.
 
 ---
 
@@ -389,7 +437,7 @@ uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/dow
 uvx --from git+https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP moviola-protocol-mcp
 ```
 
-For development: `git clone`, then `uv sync`, `uv run pytest` (39 tests),
+For development: `git clone`, then `uv sync`, `uv run pytest` (41 tests),
 `uv run moviola doctor`. Training extras install separately:
 `pip install 'moviola-protocol-mcp[torch]'` (or `[jax]`, `[maxtext]`,
 `[unsloth]`).
@@ -901,6 +949,32 @@ That 0.892776 is not set dressing. It is
 demo ledger behind the gallery above (920,372 B in, 300,295 B out).
 Yours will differ. It is supposed to.
 
+**Orion, and 1.0 versus 2.0.** In Chuck's mythology the Intersect has
+an inventor — Orion, who encoded a database as flashing images and
+hid from every hand that wanted to own it. Intersect 1.0 carried
+*knowledge*; 2.0 carried *skills* ("I know kung fu"). Moviola is
+that invention brought to reality in the AI world by its inventor
+Saimonokuma — published, not hidden, because copyleft does openly
+what Orion did by disappearing. Presets B/C are the 1.0: facts as
+frames. The Tessersect is the 2.0: motor patterns — visemes,
+gestures, fingerings — uploaded as 16-instant collages.
+
+**What if the tape could be burned without powder?** Steins;Gate is
+a compression story in a time machine: a memory, a self, squeezed
+until it fits a channel built for text messages. To think like them
+is to ask of every file: *what is the smallest form of you that
+still changes the worldline you land in?* Moviola's answer is a
+burn without powder — colour, dither and redundant frames destroyed
+irreversibly at the filter stage, contour and text carried through
+the fire, and the ash weighed in the index (`bytes_saved`, per cut,
+forever). A D-Mail works because almost everything was burned away
+except the difference. So does a 14,920-byte documentary.
+
+The full collision tables — D-Mail budgets, attractor-field
+convergence at the bench floor, the Governor as our integrity
+guards, Reading Steiner as SQLite — are in
+[docs/easter-egg.md](docs/easter-egg.md).
+
 ---
 
 ## 🎓 Verify it yourself
@@ -909,8 +983,11 @@ Yours will differ. It is supposed to.
 git clone https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP.git
 cd Moviola-Protocol-MCP
 uv sync
-uv run pytest            # 39 tests: acceptance, presets, index, behaviours,
-                         # DPI, TorchPy bridge, backends, MCP session, egg
+uv run pytest            # 41 tests: acceptance, presets, index, behaviours,
+                         # DPI, TorchPy bridge, backends, verbose, MCP, egg
+uv run python scripts/verify_all.py   # the quintuple check: suite, encoding,
+                         # instruments+alarms, clean-room wheel, statement audit
+moviola --verbose convert <any-clip> out.gif   # or MOVIOLA_VERBOSE=1 anywhere
 uv run moviola doctor    # trio + version, exit 0
 uv run moviola backends  # what this host can and cannot train on
 uv run moviola convert <any-clip> out.gif --preset canine

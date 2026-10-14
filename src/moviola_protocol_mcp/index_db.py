@@ -11,7 +11,9 @@ from __future__ import annotations
 
 import os
 import sqlite3
+from contextlib import contextmanager
 from pathlib import Path
+from typing import Iterator
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS conversions (
@@ -76,14 +78,26 @@ def resolve_db_path(db_path: str | None = None) -> Path:
     return Path.cwd() / "moviola.db"
 
 
-def connect(db_path: str | None = None) -> sqlite3.Connection:
+@contextmanager
+def connect(db_path: str | None = None) -> Iterator[sqlite3.Connection]:
+    """Yield a schema-ready connection and always close it.
+
+    sqlite3's own context manager commits but never closes, which
+    leaks file handles until Windows refuses to move the database
+    (measured by scripts/verify_all.py gate 3). Closing is explicit
+    here so every caller gets it for free.
+    """
     path = resolve_db_path(db_path)
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(path)
-    conn.row_factory = sqlite3.Row
-    conn.execute(SCHEMA)
-    conn.commit()
-    return conn
+    try:
+        conn.row_factory = sqlite3.Row
+        conn.execute(SCHEMA)
+        conn.commit()
+        yield conn
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def record_conversion(db_path: str | None, row: dict) -> int:

@@ -8,6 +8,8 @@ successful or not, is written to the index before returning.
 from __future__ import annotations
 
 import json
+import os
+import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -30,6 +32,38 @@ EVEN_PAD = "pad=ceil(iw/2)*2:ceil(ih/2)*2"
 
 def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+
+def verbose_enabled(verbose: bool | None = None) -> bool:
+    """Verbose tracing: explicit argument wins, else MOVIOLA_VERBOSE env."""
+    if verbose is not None:
+        return bool(verbose)
+    return os.environ.get("MOVIOLA_VERBOSE", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+
+
+class DebugLog:
+    """Collects trace lines; mirrors them to stderr when enabled.
+
+    Everything debuggable indefinitely means: any conversion ever run
+    can be re-run with verbose on and will narrate its own trio,
+    derivation, filter chain, argv, probe facts and index row.
+    """
+
+    def __init__(self, enabled: bool) -> None:
+        self.enabled = enabled
+        self.lines: list[str] = []
+
+    def __call__(self, message: str) -> None:
+        if not self.enabled:
+            return
+        line = f"[moviola] {message}"
+        self.lines.append(line)
+        print(line, file=sys.stderr)
 
 
 def height_for_dpi(
@@ -144,16 +178,23 @@ def _run_conversion(
     db_path: str | None,
     trio: Trio,
     timeout_seconds: int,
+    debug: DebugLog | None = None,
 ) -> dict:
+    debug = debug or DebugLog(False)
     ffmpeg = require_ffmpeg(trio)
+    debug(f"ffmpeg={ffmpeg} ffprobe={trio.ffprobe} ffplay={trio.ffplay}")
+    debug(f"source_facts={json.dumps(source_facts, sort_keys=True)}")
     output.parent.mkdir(parents=True, exist_ok=True)
     suffix = output.suffix.lower()
     still = suffix in IMAGE_OUTPUTS and suffix != ".webp"
     chain = preset.filter_chain(fps=fps, height=height, include_fps=not still)
+    debug(f"preset={preset.name} fps={fps or preset.default_fps} height={height}")
+    debug(f"filter_chain={chain or '(none)'}")
     source_suffix = Path(source_label.split(" (+")[0]).suffix.lower()
     args = [str(ffmpeg), "-y", "-v", "error", *input_args]
     args += _output_args(preset, chain, suffix, source_suffix, crf)
     args.append(str(output))
+    debug(f"argv={json.dumps(args)}")
 
     row: dict = {
         "created_at": _now(),
@@ -183,6 +224,7 @@ def _run_conversion(
         raise
 
     output_facts = probe_media(str(output), trio.ffprobe)
+    debug(f"output_facts={json.dumps(output_facts, sort_keys=True)}")
     row["output_bytes"] = output.stat().st_size
     row["output_width"] = output_facts.get("width")
     row["output_height"] = output_facts.get("height")
@@ -191,8 +233,9 @@ def _run_conversion(
         row["ratio"] = row["output_bytes"] / source_bytes
         row["bytes_saved"] = source_bytes - row["output_bytes"]
     row_id = record_conversion(db_path, row)
+    debug(f"index_row id={row_id} db={resolve_db_path(db_path)}")
 
-    return {
+    result = {
         "id": row_id,
         "source": source_label,
         "source_bytes": source_bytes,
@@ -207,6 +250,9 @@ def _run_conversion(
         "ffmpeg": str(ffmpeg),
         "command": args,
     }
+    if debug.enabled:
+        result["debug"] = debug.lines
+    return result
 
 
 def convert_media(
@@ -221,6 +267,7 @@ def convert_media(
     db_path: str | None = None,
     ffmpeg_dir: str | None = None,
     timeout_seconds: int = 7200,
+    verbose: bool | None = None,
 ) -> dict:
     """Convert one file (video or image) to the output path's format.
 
@@ -238,10 +285,14 @@ def convert_media(
     source_path = Path(source)
     if not source_path.exists():
         raise ConversionError(f"source not found: {source}")
+    debug = DebugLog(verbose_enabled(verbose))
     chosen = get_preset(preset)
     trio = locate_trio(ffmpeg_dir)
+    debug(f"convert source={source} output={output} preset={chosen.name}")
     facts = probe_media(source, trio.ffprobe)
     effective_height = _resolve_height(height, dpi, reference_width_inches, facts)
+    if dpi is not None:
+        debug(f"dpi={dpi} at {reference_width_inches}in -> height={effective_height}")
     output_path = Path(output)
     still_input = facts.get("frames") == 1 or (
         source_path.suffix.lower() in IMAGE_OUTPUTS and facts.get("frames") in (None, 1)
@@ -278,6 +329,7 @@ def convert_media(
         db_path=db_path,
         trio=trio,
         timeout_seconds=timeout_seconds,
+        debug=debug,
     )
     if dpi is not None:
         result["dpi"] = dpi
@@ -298,6 +350,7 @@ def slideshow_from_images(
     db_path: str | None = None,
     ffmpeg_dir: str | None = None,
     timeout_seconds: int = 7200,
+    verbose: bool | None = None,
 ) -> dict:
     """Build a slideshow (gif/mp4/webp) from PNG/JPG images in order.
 
@@ -350,6 +403,7 @@ def slideshow_from_images(
             db_path=db_path,
             trio=trio,
             timeout_seconds=timeout_seconds,
+            debug=DebugLog(verbose_enabled(verbose)),
         )
     result["images"] = len(paths)
     result["seconds_per_image"] = seconds_per_image

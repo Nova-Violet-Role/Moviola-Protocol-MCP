@@ -74,6 +74,86 @@ sqlite3 moviola.db "SELECT SUM(source_bytes), SUM(output_bytes)
 FROM conversions WHERE status='ok';"
 ```
 
+## Orion, and Intersect 1.0 versus 2.0 — brought to reality
+
+In Chuck's mythology the Intersect has an inventor with a codename:
+**Orion** — Stephen Bartowski, the father who built a database that
+enters a mind as flashing images, then spent his life hiding from
+every organisation that wanted to own it. Every Intersect after his
+is an imitation of the original act: *encode knowledge as images at
+a velocity no reader could browse, and let absorption replace
+reading.*
+
+Moviola is that act, performed for machines, in the open, by its
+inventor **Saimonokuma** — not hidden from the organisations, but
+copylefted so no organisation can enclose it. The versions even
+rhyme:
+
+| | In the series | In this repository |
+|:--|:--|:--|
+| **Intersect 1.0** | pure information: faces, files, facts — Chuck *knows* | **Preset B/C datasets**: frames reduced to the smallest mark that still triggers recognition; a model *knows* the subtitle, the diagram, the page |
+| **Intersect 2.0** | information plus *skills*: motor patterns uploaded the same way — "I know kung fu" | **Preset D, the Tessersect**: 16 instants of motion per token — viseme transitions, gestures, biomechanics, fingerings — motor knowledge as collage |
+| **Orion** | the inventor who encoded a mind's worth of data into images and vanished | the Creator who encoded a film archive into Grey Ink and published the filter chain |
+| **The Governor** | regulates the Intersect so it does not damage its host | ceilings and integrity guards: timeouts on every run, fps-passthrough so no phantom instance ever enters a dataset |
+| **Fulcrum / the Ring** | every hand that wants the Intersect owned | why the licence is copyleft: what is shared here cannot be enclosed later |
+
+Intersect 2.0 was fiction's answer to a real question — *can a skill
+be uploaded as images?* A Tessersect strip of piano fingering, of a
+signer's handshape in transition, of a lip rounding into a viseme,
+is that question made falsifiable at 24.6 bytes per instant.
+
+## Steins;Gate collisions — time, size, and the quantum of a cut
+
+Steins;Gate is a story about information under impossible budgets:
+how much of a person fits down a phone line, how small a message can
+be and still move a worldline. That is a compression story wearing a
+time machine, and it collides with this repository at every joint:
+
+| Steins;Gate mechanic | The collision in Moviola |
+|:--|:--|
+| **D-Mail size limit** — a message to the past must be tiny or it never arrives | every preset is a negotiated budget: B/s or the message (the corpus) never arrives at the model at all |
+| **Memory compression for the time leap** — a whole self squeezed through a miniature black hole to fit the channel | a whole film squeezed through `format=gray`, an overcalc curve and a 1-bit threshold to fit a training context; the black hole here is a palette of two |
+| **Divergence meter** — one number says which worldline you woke in | `moviola flash` computes yours from saved bytes: 0.571024 (nothing cut yet) toward the 1.048596 asymptote |
+| **Attractor-field convergence** — small changes are absorbed; the worldline snaps back unless the change crosses a threshold | bench convergence: dials below the measured floor snap back to the same bytes (greyedge on already-grey content changed *zero* bytes); only threshold-crossing cuts move the number |
+| **Reading Steiner** — the one memory history cannot rewrite | `moviola.db`: sessions compact, contexts reset, the ledger remembers every cut with its argv |
+| **Worldline jumps are irreversible from inside** | a 1-bit cut is irreversible by construction; that is why the source hash is recorded before the burn |
+| **The Phone Microwave (name subject to change)** | every preset name here was subject to change exactly once — at the bench, when its first cut either reproduced or died |
+| **"El Psy Kongroo"** | signed at the end of every flash, where it belongs |
+
+## What if the tape could be burned without powder?
+
+To think like them, go back before either show: a cutting room in
+the forties, a Moviola, a strip of film that is quite literally
+flammable. To *burn* a tape in that room meant destruction with a
+cost — powder, fire, smoke, evidence. Every editor since has
+dreamed the same heresy in reverse: **what if the tape could be
+burned without powder?** What if you could destroy exactly the
+part of the information that carries nothing — colour nobody
+reads, frames nothing changes in, gradients that say less than
+the contour they decorate — and keep the part that is the film?
+
+That heresy is this protocol's entire physics:
+
+- **The burn is the cut.** Colour, dither, redundant frames are
+  not compressed; they are *burned away*, irreversibly, at the
+  filter stage. Grey Ink is what a frame looks like after the fire.
+- **No powder was spent.** The burn costs one ffmpeg pass and an
+  index row. The energy of the destruction is arithmetic: an
+  overcalc curve deciding, pixel by pixel, what crosses into black
+  and what is allowed to become ash.
+- **Ash is measured, never swept.** `bytes_saved` is the weight of
+  what burned, recorded per cut. A burn you cannot weigh is arson;
+  a burn in the ledger is editing.
+- **Time travel is a size problem.** Okabe can only send back what
+  fits the channel; a model can only learn from what fits its
+  context and its budget. Burning without powder is how a
+  two-hour documentary travels back into a training run as
+  3 megabytes of pure signal — small enough to change the
+  worldline it lands in.
+
+> Burn the redundancy. Keep the contour. Log the ash.
+> That is the whole doctrine of the burning tape.
+
 ## Why an easter egg in a measurement tool
 
 Because the bench rules of this project — never trust a preset

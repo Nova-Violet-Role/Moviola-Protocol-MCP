@@ -37,6 +37,7 @@ def convert_media(
     db_path: str | None = None,
     ffmpeg_dir: str | None = None,
     timeout_seconds: int = 7200,
+    verbose: bool = False,
 ) -> dict:
     """Convert any video/image file to the output path's format.
 
@@ -64,6 +65,7 @@ def convert_media(
         db_path=db_path,
         ffmpeg_dir=ffmpeg_dir,
         timeout_seconds=timeout_seconds,
+        verbose=verbose,
     )
 
 
@@ -80,6 +82,7 @@ def slideshow_from_images(
     db_path: str | None = None,
     ffmpeg_dir: str | None = None,
     timeout_seconds: int = 7200,
+    verbose: bool = False,
 ) -> dict:
     """Build a slideshow (gif/mp4/webp) from PNG/JPG images, in order.
 
@@ -99,6 +102,7 @@ def slideshow_from_images(
         db_path=db_path,
         ffmpeg_dir=ffmpeg_dir,
         timeout_seconds=timeout_seconds,
+        verbose=verbose,
     )
 
 
