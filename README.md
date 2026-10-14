@@ -44,7 +44,7 @@ here, it is the *point*. There is an issue form for exactly that.
 New here? The fastest path is to let your agent do it:
 
 ```sh
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.1/moviola_protocol_mcp-0.3.1-py3-none-any.whl moviola doctor
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.2/moviola_protocol_mcp-0.3.2-py3-none-any.whl moviola doctor
 ```
 
 Exit 0 and a JSON block naming your `ffmpeg`, `ffprobe` and `ffplay` means
@@ -431,7 +431,7 @@ binary is a visible fact, not a mystery.
 uvx moviola-protocol-mcp
 
 # 2. From the GitHub release wheel
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.1/moviola_protocol_mcp-0.3.1-py3-none-any.whl moviola-protocol-mcp
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.2/moviola_protocol_mcp-0.3.2-py3-none-any.whl moviola-protocol-mcp
 
 # 3. Straight from the repository
 uvx --from git+https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP moviola-protocol-mcp
@@ -1035,6 +1035,25 @@ is one released organ of **Symbiose** — see the
 
 [Ko-fi](https://ko-fi.com/saimonokuma) buys time, never priority. The
 roadmap is set by falsified claims and measured benches, in the open.
+
+---
+
+## 📜 Post-Scriptum — for lecturers
+
+> **We released another piece of Symbiose-OS to the public. Was it
+> too much for 2026? No — one measured organ at a time is exactly
+> on time. It is the whole that waits, perhaps forty years.**
+
+The long-form companion to this README lives in its own folder:
+[**docs/post-scriptum/Post-Scriptum.md**](https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/blob/main/docs/post-scriptum/Post-Scriptum.md)
+— written for lecturers and the students they will set loose on it.
+Inside: what the release means, what it will do to training
+(measured / reasoned / unknown, kept apart), the MMPROJ question
+stated as an affordable experiment, a four-session teaching module,
+five labs whose expected outputs are this repository's own measured
+anchors, and discussion questions with no safe answers. If you teach
+with Moviola, start there; if your students falsify a number in it,
+that was the assignment.
 
 ---
 
