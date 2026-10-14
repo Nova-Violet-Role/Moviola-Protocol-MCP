@@ -18,9 +18,9 @@ Grey Ink, and a 90 fps collage that flashes sixteen instants per frame*
 [![Nova-Violet Role](https://img.shields.io/badge/Nova--Violet-Role-9b59b6?style=for-the-badge)](https://github.com/Nova-Violet-Role)
 [![License](https://img.shields.io/badge/License-AGPL--3.0_OR_EUPL--1.2-764ba2?style=for-the-badge)](LICENSE)
 
-[![MCP stdio](https://img.shields.io/badge/MCP-stdio%20%C2%B7%209%20tools-2C3E50?style=flat-square)](#-mcp-tools--every-tool-every-argument)
+[![MCP stdio](https://img.shields.io/badge/MCP-stdio%20%C2%B7%2011%20tools-2C3E50?style=flat-square)](#-mcp-tools--every-tool-every-argument)
 [![UVX](https://img.shields.io/badge/UVX-wheel%20verified%20clean--room-27ae60?style=flat-square)](#-install)
-[![Tests](https://img.shields.io/badge/tests-21%20passing-27ae60?style=flat-square)](#-verify-it-yourself)
+[![Tests](https://img.shields.io/badge/tests-38%20passing-27ae60?style=flat-square)](#-verify-it-yourself)
 [![ffmpeg trio](https://img.shields.io/badge/ffmpeg-ffprobe%20%C2%B7%20ffplay-374151?style=flat-square)](#requirements)
 [![REUSE](https://img.shields.io/badge/REUSE-compliant-blue?style=flat-square)](https://reuse.software/)
 
@@ -43,7 +43,7 @@ here, it is the *point*. There is an issue form for exactly that.
 New here? The fastest path is to let your agent do it:
 
 ```sh
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.2.0/moviola_protocol_mcp-0.2.0-py3-none-any.whl moviola doctor
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.0/moviola_protocol_mcp-0.3.0-py3-none-any.whl moviola doctor
 ```
 
 Exit 0 and a JSON block naming your `ffmpeg`, `ffprobe` and `ffplay` means
@@ -83,6 +83,44 @@ source -> fps -> NTSC-J range seat -> 8-bit grey -> edge relief
 That is the artifact. It converts, it is measured, and the numbers on this
 page each have an exit code behind them.
 
+The original papers the presets answer to — bench doctrine, master vision,
+lightpaper, and two outside evaluations — live verbatim in
+[`sources/`](sources/README.md), catalogued in reading order. Where they
+disagree, the bench page wins; the folder says which page that is.
+
+---
+
+## 🔮 Premier — Symbiose, announced not shipped
+
+**Moviola is part of a larger system, and this is its premier as a
+stand-alone component.** The system is **Symbiose**: one architecture in
+which models, routers, retrievers and sensors stop being separate programs
+bolted together and become organs of a single agnostic whole — dense and
+routed at once, retrieving by role, seeing in one-bit grey, remembering in
+ledgers. Pieces of it already ship on their own because each piece earned
+its release alone: RoT routes by role, RTR retrieves by role, and Moviola —
+this repository — is its eye.
+
+The whole, **Symbiose-OS**, does not ship today, and this section will not
+pretend otherwise. It is *too agnostic for humanity as it stands in 2026*:
+indifferent to any single doctrine, vendor, model family or interface, in
+a decade that still wants its intelligence product-shaped and
+vendor-locked. Perhaps in forty years — call the horizon **2066** — a
+system that refuses every crown will read as obvious. Until then,
+**(Saimonokuma), the Creator of Symbiose-OS, releases its parts as
+stand-alone components**, each measured, each falsifiable, each free under
+copyleft, so that when the whole is finally assembled there will be nothing
+in it that was not already proven in the open. When Symbiose lands, the
+bench will be the announcement: same corpora, same meters, no adjectives.
+Until then this section is a promise, and promises are not results.
+
+> *— Note of (Saimonokuma) the Creator: we released the eye first because
+> an agnostic system must still answer for what it sees. Moviola's grey
+> ink, its one-bit honesty about what changed and what did not, its ledger
+> that remembers every cut — that is how Symbiose will look at the world
+> when the world is ready to be looked at that way. Forty years is not a
+> delay. It is a measurement we have not yet earned the right to shorten.*
+
 ---
 
 ## 🎞️ The presets — thirty seconds each, on camera
@@ -121,6 +159,10 @@ moviola convert doctor.mp4 doctor-canine.gif    --preset canine
 | Doctor clip bytes | 189,882 | 29,968 | 14,920 | 65,525 | container-dependent |
 | Doctor byte rate | 6,415 B/s | 1,012 B/s | 504 B/s | 2,213 B/s (35 instants/s carried) | — |
 | Bench tape bytes † | 154,362 | 49,159 | 32,653 | — | — |
+| Ladder stages (p metric) | 1080·720·480·350·240·120 via `--height` | same | same | cell heights, same grid | — |
+| DPI at 10-inch reference | 192·128·85·62·43·21 via `--dpi` | same | same | per-cell, same grid | — |
+| TorchPy instances per source frame | 1 frame tensor | 1 frame tensor | 1 frame tensor | 1 collage tensor, or **16 cell tensors** unpacked | 1 frame tensor |
+| Dataset source filter | `preset="standard"` | `preset="intersect"` | `preset="torch"` | `preset="canine"` | `preset="passthrough"` |
 | Built for | evidence GIFs, docs, chat | subtitles, borders, contours, 3D edges | pre-training slideshows, documentaries | training absorption, Intersect-style flash corpora | plain format change, gif→mp4 for models |
 
 † Bench tape: 706×264, 5 s, 569,469 B HEVC mp4 — the `MOVIOLA-PROTOCOL.md`
@@ -182,6 +224,55 @@ will tell you your own rates within one conversion; believe those.
 
 ---
 
+## 🪜 The scaling ladder — DPI and p, stage by stage, in GIF
+
+Resolution is a choice, and it has two honest names: **lines** (the `p`
+metric) and **DPI** (pixels per inch at a stated reference size — here a
+10-inch display width, always printed beside the number). The ladder
+below walks one true-1080p text/code-rich source (generated, 12 s,
+284,020 B) down every stage in three variants. Each GIF steps through
+its stages on one canvas, small stages neighbor-upscaled so the pixel
+growth is visible; the bytes in the tables are the direct first-pass
+cuts from the index, never the labeled presentation GIFs. Regenerate
+everything with `uv run python scripts/build_ladder.py`.
+
+| Variant | The ladder |
+|:--|:--|
+| **V1 · DPI metric** (Standard, `--dpi`) | ![DPI ladder](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/ladder/ladder-dpi.gif) |
+| **V2 · p resolution** (Intersect, `--height`) | ![p ladder](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/ladder/ladder-p.gif) |
+| **V3 · Torch** (1-bit, 5 fps) | ![Torch ladder](https://raw.githubusercontent.com/Nova-Violet-Role/Moviola-Protocol-MCP/main/docs/ladder/ladder-torch.gif) |
+
+| Stage | DPI @10in | V1 Standard B/s → 1 h 50 m | V2 Intersect B/s → 1 h 50 m | V3 Torch B/s → 1 h 50 m |
+|:--|--:|--:|--:|--:|
+| Original 1080p | 192 | 20,315 → 134.1 MB | 4,278 → 28.2 MB | 3,311 → 21.9 MB |
+| 720p | 128 | 10,849 → 71.6 MB | 7,593 → 50.1 MB \* | 3,961 → 26.1 MB \* |
+| 480p | 85 | 6,123 → 40.4 MB | 2,915 → 19.2 MB | 2,047 → 13.5 MB |
+| 350p | 62 | 4,609 → 30.4 MB | 1,198 → 7.9 MB | 845 → 5.6 MB |
+| 240p | 43 | 2,728 → 18.0 MB | 762 → 5.0 MB | 530 → 3.5 MB |
+| 120p | 21 | 1,424 → 9.4 MB | 496 → 3.3 MB | **341 → 2.25 MB** |
+
+\* **The 720p anomaly, published not smoothed:** under the 1-bit presets,
+720p costs *more* than native 1080p on this source. The mechanism is
+reasoned, labelled as such: at native size the synthetic text edges are
+already crisp two-level shapes and the threshold is nearly free; the
+720p downscale first paints intermediate greys along every edge, and
+overcalc-then-threshold turns that halo into speckle the GIF encoder
+must spell out. By 480p the speckle merges and the ladder turns
+monotonic again. A dial that misbehaves at one stage is information,
+and it stays in the table.
+
+**The claim this ladder earns, stated exactly:** with resolution chosen
+in DPI or p metrics, Moviola reaches the culmination point for
+Image/Video/Slide training corpora — sub-5 MB and sub-3 MB long-form
+cuts at named stages (doctor clip: Standard @216p → 4.73 MB,
+Torch @270p → 2.64 MB per 1 h 50 m; synthetic 1080p source:
+Torch @120p → 2.25 MB), 16-instant Tessersect collages for flash
+absorption, and a first-class PyTorch/JAX dataset bridge reading all
+of it back. Not at native resolution, not by magic — by choosing the
+stage, in the open, with the meter running.
+
+---
+
 ## 🚀 Install
 
 ### Requirements
@@ -202,7 +293,7 @@ binary is a visible fact, not a mystery.
 
 ```sh
 # 1. From the GitHub release wheel (today's verified path)
-uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.2.0/moviola_protocol_mcp-0.2.0-py3-none-any.whl moviola-protocol-mcp
+uvx --from https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP/releases/download/v0.3.0/moviola_protocol_mcp-0.3.0-py3-none-any.whl moviola-protocol-mcp
 
 # 2. Straight from the repository
 uvx --from git+https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP moviola-protocol-mcp
@@ -212,14 +303,16 @@ uvx --from git+https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP moviola-
 uvx moviola-protocol-mcp        # after the PyPI upload lands
 ```
 
-For development: `git clone`, then `uv sync`, `uv run pytest` (21 tests),
-`uv run moviola doctor`.
+For development: `git clone`, then `uv sync`, `uv run pytest` (38 tests),
+`uv run moviola doctor`. Training extras install separately:
+`pip install 'moviola-protocol-mcp[torch]'` (or `[jax]`, `[maxtext]`,
+`[unsloth]`).
 
 ---
 
 ## 🕹️ MCP tools — every tool, every argument
 
-Transport: **stdio**. Architecture: traditional flat tools — nine fixed
+Transport: **stdio**. Architecture: traditional flat tools — eleven fixed
 operations, each with a declared JSON schema, no discovery layer to drift.
 Register it anywhere MCP speaks:
 
@@ -246,7 +339,9 @@ shapes the pixels; the extension chooses the container.
 | `output` | string | — | output path; extension picks gif/mp4/webm/webp/png/jpg/… |
 | `preset` | string | `"standard"` | `standard`·`intersect`·`torch`·`canine`·`passthrough` (aliases `a`–`d`, `tessersect`) |
 | `fps` | int\|null | preset's | sampling rate (Standard accepts 10–15; Tessersect cell velocity) |
-| `height` | int\|null | preset's | Torch 360/480; Tessersect cell height (120); never upscales |
+| `height` | int\|null | preset's | ladder stage in lines (p metric); Torch 360/480; Tessersect cell height (120); never upscales |
+| `dpi` | float\|null | null | ladder stage in DPI (pixels per inch at `reference_width_inches`); refused together with `height` — two names for one choice |
+| `reference_width_inches` | float | 10.0 | the display width the DPI number is stated against, always printed with it |
 | `crf` | int | 23 | x264 quality for mp4-family outputs (plugin parity) |
 | `db_path` | string\|null | `./moviola.db` | index location (`MOVIOLA_DB` if set) |
 | `ffmpeg_dir` | string\|null | auto | directory holding the trio |
@@ -270,7 +365,7 @@ Ordered PNG/JPG set → one gif/mp4/webp slideshow.
 | `output` | string | — | output path |
 | `preset` | string | `"torch"` | as above; with `canine`, each image is **one collage cell** |
 | `seconds_per_image` | float | 1.0 | hold per image (Torch pre-training form: 0.2 ⇒ 5 img/s) |
-| `fps`, `height`, `db_path`, `ffmpeg_dir`, `timeout_seconds` | — | — | as in `convert_media` |
+| `fps`, `height`, `dpi`, `reference_width_inches`, `db_path`, `ffmpeg_dir`, `timeout_seconds` | — | — | as in `convert_media` |
 
 Returns the conversion result plus `{images, seconds_per_image}` (the
 effective cell duration under Tessersect, `1/(fps or 90)`).
@@ -307,6 +402,26 @@ copies the bundled gif-as-mp4 plugin (and, unless declined, the portable
 read tool) into an OpenCode config directory. See
 [The OpenCode plugin](#-the-opencode-plugin--gif-in-mp4-out).
 
+### `training_backends`
+
+No arguments → the measured training landscape of this host: torch
+(ROCm/HIP or CUDA builds named apart), JAX devices, AITER, jax-aiter,
+Primus + `primus-cli`, TorchTitan, Megatron-LM, MaxText, Unsloth —
+installed or not, each with its install line and its exact Moviola
+interop format. Detection only; nothing is downloaded. On a Windows
+RDNA2 host it says plainly that ROCm does not run there.
+
+### `export_training_data`
+
+`{sources, out, format="webdataset", height?, dpi?,
+reference_width_inches=10, max_samples_per_shard=1000, instruction,
+ffmpeg_dir?, timeout_seconds}` → one dispatch to every layout:
+`image-folder` (TorchTitan/torchvision), `webdataset` (one tar),
+`datacenter-shards` (Primus/Megatron-Energon numbered shards +
+manifest), `arrayrecord` (JAX MaxText/Grain), `unsloth` (vision-SFT
+`train.jsonl` + images). Sources are files or folders of any
+ffmpeg-decodable filetype; `height`/`dpi` cut at a ladder stage.
+
 ---
 
 ## 💻 CLI — the same core, no server
@@ -314,6 +429,7 @@ read tool) into an OpenCode config directory. See
 ```sh
 moviola convert lecture.mp4 lecture.gif --preset standard --fps 12
 moviola convert lecture.mp4 lecture-torch.gif --preset torch --height 480
+moviola convert lecture.mp4 lecture-216p.gif --preset standard --dpi 38
 moviola convert lecture.mp4 lecture-tessersect.gif --preset canine
 moviola convert frames.gif frames.mp4 --preset passthrough
 moviola convert still.png still-grey.jpg --preset intersect
@@ -325,6 +441,9 @@ moviola doctor
 moviola history --preset canine --limit 10
 moviola stats
 moviola chains
+moviola backends
+moviola export-dataset lecture.gif shards/ --format datacenter-shards --height 240
+moviola export-dataset slides/ deck/ --format unsloth --dpi 43
 moviola install-plugin --target ~/.config/opencode
 moviola flash
 ```
@@ -365,7 +484,7 @@ whole lineage stops being folklore and becomes a `SELECT`.
 
 ## 🐕 Canine Logic & the Tessersect
 
-The Moviola papers in this repository describe a *"Canine-Logic"* sensor:
+The Moviola papers in [`sources/`](sources/README.md) describe a *"Canine-Logic"* sensor:
 1-bit sparse matrices, delta-motion only, kinetic frequency above 90 fps —
 the Dynamic Vision Sensor (DVS) reading of how a dog actually sees:
 dichromatic, rod-dominated, acuity-poor, *motion-rich*, with a flicker
@@ -436,6 +555,54 @@ measure far below both anchors. Run one conversion, read your own
 document scans) into Tessersect flash frames at 90 cells/s ingestion
 velocity. Pair with `index_stats` to report exactly what the corpus cost.
 
+### TorchPy — one Dataset, every framework, no NVIDIA required
+
+`moviola_protocol_mcp.torch_data.MoviolaFrameDataset` is a plain
+`torch.utils.data.Dataset` of `[1,H,W]` float tensors, ladder-native:
+`ladder_stage=240` (or `height=`, or `dpi=` at a reference width) cuts
+every instance at that stage, `unpack_collage=True` turns each
+Tessersect frame into 16 cell instances, and
+`MoviolaFrameDataset.from_index(db, preset="canine")` builds a dataset
+per rendering straight from `moviola.db`. Frame extraction is
+**passthrough-exact** (one instance per stored frame — a resampling
+bug that duplicated fractional-fps instances was measured, 334 from
+167, and is now regression-tested). No numpy, no Pillow: ffmpeg
+decodes grey bytes, torch reads the buffer. The same frames convert
+to JAX with `to_jax_array` (NCHW/NHWC), and `export_training_data`
+writes every layout the frameworks stream:
+
+| Framework | How Moviola feeds it | Acceleration note |
+|:--|:--|:--|
+| **PyTorch / TorchTitan** | `MoviolaFrameDataset`, image-folder export | ROCm builds need no dataset change — HIP rides the cuda API |
+| **AITER** (ROCm kernels) | `accelerated_attention` → `aiter.flash_attn_func`; `accelerated_gemm_int8` → `aiter.gemm_a8w8_*` after `pertoken_quant` | the attention/GEMM speed-ups stock PyTorch does not ship for ROCm; probed at runtime, stock fallback named |
+| **JAX MaxText** | `to_jax_array`; `export_arrayrecord` for Grain pipelines | ROCm via `jax[rocm]` or Primus `rocm/jax-training:maxtext-*` images; jax-aiter brings AITER kernels to JAX |
+| **Megatron-LM** | `export_webdataset` / datacenter shards (Megatron-Energon streams WebDataset) | under Primus on ROCm |
+| **AMD Primus** (datacenter) | `export_datacenter_shards` — numbered tar shards + `manifest.json` | one config across Megatron-LM, TorchTitan and JAX MaxText backends |
+| **Unsloth** | `export_unsloth` — vision-SFT `train.jsonl` (messages + images) over Moviola frames | derived captions included; replace with real ones for real tasks |
+
+```python
+from moviola_protocol_mcp.torch_data import MoviolaFrameDataset
+from torch.utils.data import DataLoader
+
+ds = MoviolaFrameDataset.from_index("moviola.db", preset="canine",
+                                    ladder_stage=240, unpack_collage=True)
+batch = next(iter(DataLoader(ds, batch_size=64)))   # [64, 1, 240, W] cells
+```
+
+`moviola backends` reports what is installed here versus what each
+install line adds — on this Windows/RDNA2 development host it says
+plainly that ROCm does not run, while every data path above is tested
+torch-free. Demonstrate end-to-end (five renderings, ladder stages,
+exports, DataLoader when torch exists):
+
+```sh
+uv run python scripts/demo_torch_dataset.py moviola.db
+```
+
+Extras: `pip install 'moviola-protocol-mcp[torch]'`, `[jax]`,
+`[maxtext]`, `[unsloth]`. ROCm wheels and Primus come from their own
+indexes; `moviola backends` prints the exact lines.
+
 ---
 
 ## 🔌 The OpenCode plugin — GIF in, MP4 out
@@ -503,10 +670,13 @@ Yours will differ. It is supposed to.
 git clone https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP.git
 cd Moviola-Protocol-MCP
 uv sync
-uv run pytest            # 21 tests: acceptance, presets, index, behaviours,
-                         # a real MCP stdio session, the easter egg
+uv run pytest            # 38 tests: acceptance, presets, index, behaviours,
+                         # DPI, TorchPy bridge, backends, MCP session, egg
 uv run moviola doctor    # trio + version, exit 0
+uv run moviola backends  # what this host can and cannot train on
 uv run moviola convert <any-clip> out.gif --preset canine
+uv run python scripts/build_ladder.py        # regenerate the ladder + tables
+uv run python scripts/demo_torch_dataset.py  # five renderings as datasets
 sqlite3 moviola.db "SELECT preset, source_bytes, output_bytes FROM conversions;"
 ```
 
@@ -538,9 +708,12 @@ and software meet — frameworks for approaching complex problems from more
 than one angle at a time. Moviola Protocol MCP is its *sensory* arm: the
 same discipline the organisation applies to reasoning (declare the shape,
 measure reality against it, keep the ledger) applied to pixels. The
-papers in this repository (`MOVIOLA-PROTOCOL.md` is the bench truth;
-`Moviola_Protocol.md` is the vision it answers to) are the two ends of
-that argument, and the code is where they agree to be bound by exit codes.
+papers in [`sources/`](sources/README.md) (`sources/MOVIOLA-PROTOCOL.md`
+is the bench truth; `sources/Moviola_Protocol.md` is the vision it
+answers to) are the two ends of that argument, and the code is where
+they agree to be bound by exit codes. Within the wider work, Moviola
+is one released organ of **Symbiose** — see the
+[Premier](#-premier--symbiose-announced-not-shipped).
 
 ## ☕ Supporting a non-profit
 

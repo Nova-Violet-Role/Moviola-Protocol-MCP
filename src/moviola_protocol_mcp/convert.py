@@ -32,6 +32,44 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
+def height_for_dpi(
+    dpi: float,
+    reference_width_inches: float,
+    source_width: int | None,
+    source_height: int | None,
+) -> int:
+    """Derive a target height from a DPI resolution metric.
+
+    DPI is pixels per inch at a stated reference size: the target
+    width is dpi * reference_width_inches, and the height follows
+    from the source aspect ratio. The reference size is part of the
+    metric and is always named beside the number, never hidden.
+    """
+    if dpi <= 0 or reference_width_inches <= 0:
+        raise ConversionError("dpi and reference_width_inches must be positive")
+    if not source_width or not source_height:
+        raise ConversionError(
+            "dpi conversion needs probed source dimensions; ffprobe reported none"
+        )
+    target_width = dpi * reference_width_inches
+    return max(2, round(target_width * source_height / source_width))
+
+
+def _resolve_height(
+    height: int | None,
+    dpi: float | None,
+    reference_width_inches: float,
+    facts: dict,
+) -> int | None:
+    if dpi is not None and height is not None:
+        raise ConversionError("dpi and height are two names for one choice; pass one")
+    if dpi is None:
+        return height
+    return height_for_dpi(
+        dpi, reference_width_inches, facts.get("width"), facts.get("height")
+    )
+
+
 def _gif_args(preset: Preset, chain: str) -> list[str]:
     colors = preset.palette_colors or 256
     reserve = ":reserve_transparent=0" if colors <= 2 else ""
@@ -177,6 +215,8 @@ def convert_media(
     preset: str = "standard",
     fps: int | None = None,
     height: int | None = None,
+    dpi: float | None = None,
+    reference_width_inches: float = 10.0,
     crf: int = 23,
     db_path: str | None = None,
     ffmpeg_dir: str | None = None,
@@ -188,14 +228,21 @@ def convert_media(
     the container. gif to mp4 with preset passthrough reproduces the
     OpenCode plugin transcode exactly (plus an even-dimension pad the
     plugin lacks, which only changes odd-sized inputs).
+
+    Resolution may be chosen in lines (height, the p metric) or in
+    DPI at a named reference width (pixels = dpi * inches); the two
+    are one choice and are refused together.
     """
+    if dpi is not None and height is not None:
+        raise ConversionError("dpi and height are two names for one choice; pass one")
     source_path = Path(source)
     if not source_path.exists():
         raise ConversionError(f"source not found: {source}")
     chosen = get_preset(preset)
     trio = locate_trio(ffmpeg_dir)
     facts = probe_media(source, trio.ffprobe)
-    return _run_conversion(
+    effective_height = _resolve_height(height, dpi, reference_width_inches, facts)
+    result = _run_conversion(
         input_args=["-i", str(source_path)],
         source_label=str(source_path),
         source_bytes=source_path.stat().st_size,
@@ -203,12 +250,16 @@ def convert_media(
         output=Path(output),
         preset=chosen,
         fps=fps,
-        height=height,
+        height=effective_height,
         crf=crf,
         db_path=db_path,
         trio=trio,
         timeout_seconds=timeout_seconds,
     )
+    if dpi is not None:
+        result["dpi"] = dpi
+        result["reference_width_inches"] = reference_width_inches
+    return result
 
 
 def slideshow_from_images(
@@ -218,6 +269,8 @@ def slideshow_from_images(
     seconds_per_image: float = 1.0,
     fps: int | None = None,
     height: int | None = None,
+    dpi: float | None = None,
+    reference_width_inches: float = 10.0,
     crf: int = 23,
     db_path: str | None = None,
     ffmpeg_dir: str | None = None,
@@ -243,6 +296,8 @@ def slideshow_from_images(
 
     chosen = get_preset(preset)
     trio = locate_trio(ffmpeg_dir)
+    first_facts = probe_media(str(paths[0]), trio.ffprobe)
+    height = _resolve_height(height, dpi, reference_width_inches, first_facts)
     if chosen.collage:
         # One image per Tessersect cell, at the flash velocity.
         seconds_per_image = 1.0 / (fps or chosen.default_fps)
@@ -275,4 +330,7 @@ def slideshow_from_images(
         )
     result["images"] = len(paths)
     result["seconds_per_image"] = seconds_per_image
+    if dpi is not None:
+        result["dpi"] = dpi
+        result["reference_width_inches"] = reference_width_inches
     return result

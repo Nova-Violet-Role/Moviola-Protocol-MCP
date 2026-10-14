@@ -12,6 +12,11 @@ from .flash import flash_report
 from .index_db import conversion_chains, index_stats, list_conversions
 from .plugin_install import install_opencode_plugin
 from .presets import list_presets
+from .training_backends import (
+    TRAINING_FORMATS,
+    backend_report,
+    export_training_data,
+)
 
 
 def _print(value: object) -> None:
@@ -38,12 +43,19 @@ def build_parser() -> argparse.ArgumentParser:
     convert.add_argument(
         "--preset",
         default="standard",
-        help="standard (A), intersect (B), torch (C), passthrough",
+        help="standard (A), intersect (B), torch (C), canine (D), passthrough",
     )
     convert.add_argument("--fps", type=int, default=None)
     convert.add_argument(
         "--height", type=int, default=None, help="360 or 480 for torch"
     )
+    convert.add_argument(
+        "--dpi",
+        type=float,
+        default=None,
+        help="resolution in DPI at --ref-width-inches",
+    )
+    convert.add_argument("--ref-width-inches", type=float, default=10.0)
     convert.add_argument("--crf", type=int, default=23)
     convert.add_argument("--timeout", type=int, default=7200)
     _add_common(convert)
@@ -55,6 +67,8 @@ def build_parser() -> argparse.ArgumentParser:
     slideshow.add_argument("--seconds", type=float, default=1.0, help="per image")
     slideshow.add_argument("--fps", type=int, default=None)
     slideshow.add_argument("--height", type=int, default=None)
+    slideshow.add_argument("--dpi", type=float, default=None)
+    slideshow.add_argument("--ref-width-inches", type=float, default=10.0)
     slideshow.add_argument("--timeout", type=int, default=7200)
     _add_common(slideshow)
 
@@ -87,6 +101,29 @@ def build_parser() -> argparse.ArgumentParser:
     flash = sub.add_parser("flash", help="flash on the presets (easter egg)")
     _add_common(flash)
 
+    sub.add_parser(
+        "backends",
+        help="training stacks detected here (torch/ROCm, AITER, JAX, Primus...)",
+    )
+
+    export = sub.add_parser(
+        "export-dataset", help="export frames as a training dataset layout"
+    )
+    export.add_argument("sources", nargs="+")
+    export.add_argument("out")
+    export.add_argument(
+        "--format", choices=list(TRAINING_FORMATS), default="webdataset"
+    )
+    export.add_argument(
+        "--height", type=int, default=None, help="ladder stage in lines"
+    )
+    export.add_argument("--dpi", type=float, default=None)
+    export.add_argument("--ref-width-inches", type=float, default=10.0)
+    export.add_argument("--max-samples-per-shard", type=int, default=1000)
+    export.add_argument("--instruction", default="Describe this Moviola grey frame.")
+    export.add_argument("--timeout", type=int, default=7200)
+    _add_common(export)
+
     return parser
 
 
@@ -101,6 +138,8 @@ def main(argv: list[str] | None = None) -> int:
                     preset=args.preset,
                     fps=args.fps,
                     height=args.height,
+                    dpi=args.dpi,
+                    reference_width_inches=args.ref_width_inches,
                     crf=args.crf,
                     db_path=args.db_path,
                     ffmpeg_dir=args.ffmpeg_dir,
@@ -116,6 +155,8 @@ def main(argv: list[str] | None = None) -> int:
                     seconds_per_image=args.seconds,
                     fps=args.fps,
                     height=args.height,
+                    dpi=args.dpi,
+                    reference_width_inches=args.ref_width_inches,
                     db_path=args.db_path,
                     ffmpeg_dir=args.ffmpeg_dir,
                     timeout_seconds=args.timeout,
@@ -145,6 +186,23 @@ def main(argv: list[str] | None = None) -> int:
             _print(conversion_chains(db_path=args.db_path))
         elif args.command == "flash":
             print(flash_report(db_path=args.db_path))
+        elif args.command == "backends":
+            _print(backend_report())
+        elif args.command == "export-dataset":
+            _print(
+                export_training_data(
+                    sources=args.sources,
+                    out=args.out,
+                    format=args.format,
+                    height=args.height,
+                    dpi=args.dpi,
+                    reference_width_inches=args.ref_width_inches,
+                    max_samples_per_shard=args.max_samples_per_shard,
+                    instruction=args.instruction,
+                    ffmpeg_dir=args.ffmpeg_dir,
+                    timeout_seconds=args.timeout,
+                )
+            )
         elif args.command == "install-plugin":
             _print(
                 install_opencode_plugin(
@@ -154,7 +212,7 @@ def main(argv: list[str] | None = None) -> int:
                     force=args.force,
                 )
             )
-    except (ConversionError, ValueError, FileNotFoundError) as err:
+    except (ConversionError, ValueError, FileNotFoundError, RuntimeError) as err:
         print(f"moviola: {err}", file=sys.stderr)
         return 1
     return 0

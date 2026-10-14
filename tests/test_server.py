@@ -19,6 +19,8 @@ EXPECTED_TOOLS = {
     "index_stats",
     "index_chains",
     "install_opencode_plugin",
+    "training_backends",
+    "export_training_data",
 }
 
 
@@ -36,7 +38,7 @@ async def _session() -> tuple[set[str], list]:
             return names, list(presets.content)
 
 
-def test_the_mcp_server_lists_nine_tools_and_answers_list_presets() -> None:
+def test_the_mcp_server_lists_eleven_tools_and_answers_list_presets() -> None:
     names, content = asyncio.run(_session())
     assert names == EXPECTED_TOOLS
     assert content, "list_presets returned no content"

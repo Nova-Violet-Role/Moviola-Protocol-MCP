@@ -1,6 +1,6 @@
 {
   "name": "moviola-protocol-mcp-opencode-plugin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "OpenCode plugin (Moviola Protocol): GIF files ride to AI models labeled video/mp4 so motion survives mime allowlists. Ships with the moviola-protocol-mcp Python wheel; installable via npx after npm publish, or directly from the wheel.",
   "type": "module",
   "main": "./moviola-gif-as-mp4.mjs",

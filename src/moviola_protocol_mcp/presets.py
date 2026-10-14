@@ -2,7 +2,7 @@
 
 Every number here is measured, not typed from the vision prose:
 
-- Standard chain is the canonical bench pipeline (MOVIOLA-PROTOCOL.md):
+- Standard chain is the canonical bench pipeline (sources/MOVIOLA-PROTOCOL.md):
   fps, NTSC-J range seating, 8-bit grey, greyedge relief, two-pass
   palette with dither off. Eight colours is the measured floor when
   black is seated at true 0 by the NTSC-J step.
