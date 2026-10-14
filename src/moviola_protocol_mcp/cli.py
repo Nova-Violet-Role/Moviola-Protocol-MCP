@@ -8,6 +8,7 @@ import sys
 
 from .convert import convert_media, slideshow_from_images
 from .ffmpeg_tools import ConversionError, ffmpeg_version, locate_trio, probe_media
+from .flash import flash_report
 from .index_db import conversion_chains, index_stats, list_conversions
 from .plugin_install import install_opencode_plugin
 from .presets import list_presets
@@ -83,6 +84,9 @@ def build_parser() -> argparse.ArgumentParser:
     plugin.add_argument("--no-read-tool", action="store_true")
     plugin.add_argument("--force", action="store_true")
 
+    flash = sub.add_parser("flash", help="flash on the presets (easter egg)")
+    _add_common(flash)
+
     return parser
 
 
@@ -139,6 +143,8 @@ def main(argv: list[str] | None = None) -> int:
             _print(index_stats(db_path=args.db_path))
         elif args.command == "chains":
             _print(conversion_chains(db_path=args.db_path))
+        elif args.command == "flash":
+            print(flash_report(db_path=args.db_path))
         elif args.command == "install-plugin":
             _print(
                 install_opencode_plugin(

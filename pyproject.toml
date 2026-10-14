@@ -4,12 +4,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "moviola-protocol-mcp"
-version = "0.1.0"
+version = "0.2.0"
 description = "MCP server and CLI converting video and images through the Moviola Protocol grey presets, with an always-seeable SQLite index of every conversion."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "AGPL-3.0-or-later OR EUPL-1.2" }
-authors = [{ name = "Nova Violet" }]
+authors = [{ name = "Saimonokuma" }]
 keywords = ["mcp", "ffmpeg", "gif", "video", "greyscale", "moviola", "model-context-protocol"]
 classifiers = [
     "Development Status :: 3 - Alpha",

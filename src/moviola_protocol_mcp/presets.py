@@ -40,6 +40,7 @@ class Preset:
     palette_colors: int | None
     default_height: int | None
     one_bit: bool
+    collage: bool = False
 
     def filter_chain(
         self,
@@ -63,6 +64,8 @@ class Preset:
             stages.append(f"curves=all='{OVERCALC_CURVE}'")
             stages.append(f"lut=y='{ONE_BIT_THRESHOLD}'")
             stages.append("format=gray")
+        if self.collage:
+            stages.append("tile=4x4")
         return ",".join(stages)
 
     def describe(self) -> dict:
@@ -74,6 +77,7 @@ class Preset:
             "palette_colors": self.palette_colors,
             "default_height": self.default_height,
             "one_bit": self.one_bit,
+            "collage": self.collage,
             "filter_chain": self.filter_chain(),
         }
 
@@ -119,6 +123,28 @@ PRESETS: dict[str, Preset] = {
         default_height=360,
         one_bit=True,
     ),
+    "canine": Preset(
+        name="canine",
+        title="Canine Logic Moviola Tessersect (90 fps, 120p cells, 4x4 collage)",
+        summary=(
+            "Preset D. The Tessersect: tesseract net x Chuck's Intersect. "
+            "The stream is sampled at 90 fps in the canine flicker band "
+            "(the paper's +90fps kinetic frequency), each instant is cut "
+            "to a 120-line one-bit Grey-Ink cell (Intersect overcalc plus "
+            "threshold), and sixteen consecutive cells are collaged into "
+            "one 4x4 frame, oldest top-left to newest bottom-right - "
+            "sixteen informational contents per frame, flashing past for "
+            "absorption during training. Measured on the reference clip: "
+            "65,525 B, 167 collages, 824x480. Cells hold state between "
+            "source frames on sub-90fps sources, like a 1-bit sensor "
+            "watching a slower world."
+        ),
+        default_fps=90,
+        palette_colors=2,
+        default_height=120,
+        one_bit=True,
+        collage=True,
+    ),
     "passthrough": Preset(
         name="passthrough",
         title="Passthrough (format conversion, no Moviola grey)",
@@ -138,9 +164,14 @@ ALIASES = {
     "a": "standard",
     "b": "intersect",
     "c": "torch",
+    "d": "canine",
     "standard-moviola": "standard",
     "moviola": "standard",
     "intersect-torch": "torch",
+    "tessersect": "canine",
+    "tesseract": "canine",
+    "canine-logic": "canine",
+    "canine-tessersect": "canine",
     "none": "passthrough",
     "off": "passthrough",
 }

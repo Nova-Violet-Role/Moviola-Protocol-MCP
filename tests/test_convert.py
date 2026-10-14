@@ -129,6 +129,38 @@ def test_images_become_a_torch_slideshow_gif(ffmpeg: str, tmp_path: Path) -> Non
     assert facts["duration"] is not None and facts["duration"] >= 0.5
 
 
+def test_canine_tessersect_collages_video_into_a_four_by_four_net(
+    clip: Path, tmp_path: Path
+) -> None:
+    db = str(tmp_path / "moviola.db")
+    out = tmp_path / "canine.gif"
+    result = convert_media(str(clip), str(out), preset="canine", db_path=db)
+    assert out.exists() and out.stat().st_size > 0
+    assert result["preset"] == "canine"
+    facts = probe_media(str(out), locate_trio().ffprobe)
+    # 16 cells of 120 lines in a 4x4 net: the collage is 480 lines tall
+    # even though the source clip is only 360 lines tall.
+    assert facts["height"] == 480
+    assert facts["width"] is not None and facts["width"] % 4 == 0
+
+
+def test_canine_tessersect_treats_each_slideshow_image_as_one_cell(
+    ffmpeg: str, tmp_path: Path
+) -> None:
+    db = str(tmp_path / "moviola.db")
+    images = [
+        str(_png(ffmpeg, tmp_path / "c1.png", "darkred", "ALPHA")),
+        str(_png(ffmpeg, tmp_path / "c2.png", "darkgreen", "BETA")),
+        str(_png(ffmpeg, tmp_path / "c3.png", "darkblue", "GAMMA")),
+    ]
+    out = tmp_path / "canine-deck.gif"
+    result = slideshow_from_images(images, str(out), preset="canine", db_path=db)
+    assert out.exists() and out.stat().st_size > 0
+    assert result["images"] == 3
+    facts = probe_media(str(out), locate_trio().ffprobe)
+    assert facts["height"] == 480
+
+
 def test_missing_source_is_refused_by_name(tmp_path: Path) -> None:
     with pytest.raises(Exception, match="source not found"):
         convert_media(

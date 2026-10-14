@@ -35,15 +35,33 @@ def test_torch_preset_runs_five_fps_and_resizes_to_360_or_480() -> None:
     assert preset.one_bit is True
 
 
+def test_canine_tessersect_collages_sixteen_120p_cells_at_90_fps() -> None:
+    preset = get_preset("canine")
+    chain = preset.filter_chain()
+    assert preset.title.startswith("Canine Logic Moviola Tessersect")
+    assert "fps=90" in chain
+    assert "scale=-2:'min(120,ih)'" in chain
+    assert "lut=y='if(gt(val,128),255,0)'" in chain
+    assert chain.endswith("tile=4x4")
+    assert preset.one_bit is True
+    assert preset.palette_colors == 2
+    assert preset.default_fps == 90
+    assert preset.default_height == 120
+
+
 def test_preset_aliases_a_b_c_resolve_and_unknown_names_are_refused_by_name() -> None:
     assert get_preset("A").name == "standard"
     assert get_preset("b").name == "intersect"
     assert get_preset("C").name == "torch"
+    assert get_preset("d").name == "canine"
+    assert get_preset("Tessersect").name == "canine"
+    assert get_preset("tesseract").name == "canine"
+    assert get_preset("canine-logic").name == "canine"
     assert get_preset("none").name == "passthrough"
     with pytest.raises(ValueError, match="unknown preset 'banana'"):
         get_preset("banana")
 
 
-def test_list_presets_describes_all_four_renderings() -> None:
+def test_list_presets_describes_all_five_renderings() -> None:
     names = [entry["name"] for entry in list_presets()]
-    assert names == ["standard", "intersect", "torch", "passthrough"]
+    assert names == ["standard", "intersect", "torch", "canine", "passthrough"]

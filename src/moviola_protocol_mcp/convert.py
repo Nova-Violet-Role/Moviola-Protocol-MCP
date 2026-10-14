@@ -227,7 +227,10 @@ def slideshow_from_images(
 
     With the Torch preset at 5 fps and seconds_per_image=0.2 this is
     the pre-training form: five text/code-rich frames per second in
-    one small file.
+    one small file. With the Canine Tessersect each image is one
+    cell of the 4x4 collage, paced at the 90 fps flash velocity
+    (seconds_per_image is then the cell duration only through fps:
+    cell duration = 1/(fps or 90)).
     """
     if not images:
         raise ConversionError("slideshow needs at least one image")
@@ -240,6 +243,9 @@ def slideshow_from_images(
 
     chosen = get_preset(preset)
     trio = locate_trio(ffmpeg_dir)
+    if chosen.collage:
+        # One image per Tessersect cell, at the flash velocity.
+        seconds_per_image = 1.0 / (fps or chosen.default_fps)
     total_bytes = sum(path.stat().st_size for path in paths)
     label = str(paths[0]) + (f" (+{len(paths) - 1} images)" if len(paths) > 1 else "")
 
