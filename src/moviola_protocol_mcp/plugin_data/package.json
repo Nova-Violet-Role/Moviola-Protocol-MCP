@@ -1,0 +1,41 @@
+{
+  "name": "moviola-protocol-mcp-opencode-plugin",
+  "version": "0.1.0",
+  "description": "OpenCode plugin (Moviola Protocol): GIF files ride to AI models labeled video/mp4 so motion survives mime allowlists. Ships with the moviola-protocol-mcp Python wheel; installable via npx after npm publish, or directly from the wheel.",
+  "type": "module",
+  "main": "./moviola-gif-as-mp4.mjs",
+  "exports": {
+    ".": "./moviola-gif-as-mp4.mjs",
+    "./ts": "./moviola-gif-as-mp4.ts"
+  },
+  "bin": {
+    "moviola-install-plugin": "./install.mjs"
+  },
+  "files": [
+    "moviola-gif-as-mp4.mjs",
+    "moviola-gif-as-mp4.ts",
+    "read.ts",
+    "install.mjs"
+  ],
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "gif",
+    "mp4",
+    "moviola",
+    "mcp"
+  ],
+  "license": "AGPL-3.0-or-later OR EUPL-1.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nova-Violet-Role/Moviola-Protocol-MCP"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": "*"
+  },
+  "peerDependenciesMeta": {
+    "@opencode-ai/plugin": {
+      "optional": true
+    }
+  }
+}
